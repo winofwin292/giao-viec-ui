@@ -3,6 +3,18 @@
 
 :root {
     --primary: #00c8ff;
+
+    --color-active: #1bb89b;
+    --color-primary: #b2d1d2;
+    --color-background: #f6f6f6;
+    --color-highlighted: #6b8776;
+    --color-promo: #505b58;
+}
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
 }
 
 html {

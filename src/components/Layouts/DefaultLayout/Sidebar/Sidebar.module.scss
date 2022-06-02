@@ -1,5 +1,6 @@
 .wrapper {
     width: 255px;
+    height: 100%;
     align-items: center;
     background-color: #f4f5f7;
     color: #606266;
@@ -11,14 +12,16 @@
 
 .sidebar-overlay {
     width: 100%;
+    min-height: 100%;
     color: #606266;
     display: flex;
+    align-items: stretch;
     flex-direction: column;
     flex-basis: 0%;
     margin: 16px 0px 0px;
 }
 
-li {
+.item {
     width: 80%;
     height: 36px;
     align-items: center;
@@ -29,7 +32,7 @@ li {
     padding: 0px 10.2px;
     text-align: left;
 }
-li.active {
+.item.active {
     background-color: #ffffff;
     margin: 12px 25.5px 5px;
 }

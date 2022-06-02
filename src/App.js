@@ -6,7 +6,7 @@ import { DefaultLayout } from '~/components/Layouts';
 import Login from '~/pages/Login';
 
 function App() {
-    const [token, setToken] = useState();
+    const [token, setToken] = useState(1);
 
     if (!token) {
         return <Login setToken={setToken} />;
@@ -38,5 +38,4 @@ function App() {
         </Router>
     );
 }
-
 export default App;

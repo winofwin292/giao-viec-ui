@@ -1,8 +1,8 @@
-import axiosClient from './axiosClient';
+import axiosClient from '../axiosClient';
 
 const userApi = {
     register(data) {
-        const url = '/auth/local/register';
+        const url = '/register';
         return axiosClient.post(url, data);
     },
     login(data) {

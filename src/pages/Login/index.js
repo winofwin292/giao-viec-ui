@@ -1,10 +1,22 @@
-import classNames from 'classnames/bind';
 import { useState } from 'react';
-import PropTypes from 'prop-types';
-import styles from './Login.module.scss';
-import userApi from '~/api/useApi';
+// import PropTypes from 'prop-types';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import userApi from '~/api/Users/useApi';
+import Copyright from '~/components/Copyright';
 
-const cx = classNames.bind(styles);
+const theme = createTheme();
 
 function Login({ setToken }) {
     const [username, setUserName] = useState();
@@ -16,31 +28,82 @@ function Login({ setToken }) {
             EMAIL: username,
             PASSWORD_USERS: password,
         };
+        console.log(data);
         const token = await userApi.login(data);
         setToken(token.ID);
+        // setToken(1);
     };
 
     return (
-        <div className={cx('login-wrapper')}>
-            <h1>Please Log In</h1>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    <p>Username</p>
-                    <input type="text" onChange={(e) => setUserName(e.target.value)} />
-                </label>
-                <label>
-                    <p>Password</p>
-                    <input type="password" onChange={(e) => setPassword(e.target.value)} />
-                </label>
-                <div>
-                    <button type="submit">Submit</button>
-                </div>
-            </form>
-        </div>
+        <ThemeProvider theme={theme}>
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <Box
+                    sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Đăng nhập
+                    </Typography>
+                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="email"
+                            label="Địa chỉ email"
+                            name="email"
+                            autoComplete="email"
+                            autoFocus
+                            onChange={(e) => setUserName(e.target.value)}
+                        />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Mật khẩu"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <FormControlLabel
+                            control={<Checkbox value="remember" color="primary" />}
+                            label="Lưu mật khẩu"
+                        />
+                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                            Đăng nhập
+                        </Button>
+                        <Grid container>
+                            <Grid item xs>
+                                <Link href="#" variant="body2">
+                                    Quên mật khẩu?
+                                </Link>
+                            </Grid>
+                            <Grid item>
+                                <Link href="#" variant="body2">
+                                    {'Đăng kí'}
+                                </Link>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Box>
+                <Copyright sx={{ mt: 8, mb: 4 }} />
+            </Container>
+        </ThemeProvider>
     );
 }
-Login.propTypes = {
-    setToken: PropTypes.func.isRequired,
-};
+
+// Login.propTypes = {
+//     setToken: PropTypes.func.isRequired,
+// };
 
 export default Login;

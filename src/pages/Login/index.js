@@ -26,9 +26,8 @@ function Login({ setToken }) {
         e.preventDefault();
         const data = {
             EMAIL: username,
-            PASSWORD_USERS: password,
+            PASSWORD: password,
         };
-        console.log(data);
         const token = await userApi.login(data);
         setToken(token.ID);
         // setToken(1);

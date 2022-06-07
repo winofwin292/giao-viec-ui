@@ -12,6 +12,7 @@ import { getComparator, stableSort } from './sortTable';
 import EnhancedTableToolbar from './toolbarTable';
 import CollapseRow from './collapseRow';
 import worksApi from '~/api/Works/worksApi';
+import FormDialog from '../FormDialog';
 
 export default function EnhancedTable() {
     const [order, setOrder] = React.useState('asc');
@@ -23,11 +24,14 @@ export default function EnhancedTable() {
 
     React.useEffect(() => {
         async function fetchMyAPI() {
-            let response = await worksApi.getAll();
-            setData(response);
+            try {
+                let response = await worksApi.getAll();
+                setData(response);
+            } catch (error) {
+                console.log(error.message);
+            }
         }
         fetchMyAPI();
-        console.log('get');
     }, []);
 
     const handleRequestSort = (event, property) => {
@@ -80,6 +84,9 @@ export default function EnhancedTable() {
 
     return (
         <Box sx={{ width: '100%' }}>
+            <Paper sx={{ marginBottom: '10px', width: '100%', mb: 2, p: 2 }}>
+                <FormDialog sx={{ padding: '10px' }} />
+            </Paper>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer sx={{ maxHeight: 400 }}>
@@ -98,11 +105,11 @@ export default function EnhancedTable() {
                             {stableSort(data, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
+                                    row.STT = index + 1;
                                     return (
                                         <CollapseRow
                                             key={row.ID}
                                             data={row}
-                                            index={index}
                                             isItemSelected={isSelected(row.ID)}
                                             labelId={`enhanced-table-checkbox-${index}`}
                                             onClick={(event) => handleClick(event, row.ID)}

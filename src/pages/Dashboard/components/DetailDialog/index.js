@@ -69,8 +69,6 @@ export default function DetailDialog(props) {
         setChildData([]);
     };
 
-    console.log(childData);
-
     return (
         <div>
             <IconButton aria-label="expand row" size="small" onClick={(e) => handleClickOpen(e)}>

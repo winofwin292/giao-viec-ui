@@ -9,21 +9,18 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import TableContainer from '@mui/material/TableContainer';
-import Checkbox from '@mui/material/Checkbox';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import worksApi from '~/api/Works/worksApi';
-import DetailDialog from '../DetailDialog';
-import ChildHeader from './childTable/childHeader';
-import ChildRow from './childTable/childRow';
-import { dl_mau } from './exampleData';
-import { getComparator, stableSort } from './sortTable';
+import DetailDialog from '~/pages/Dashboard/components/DetailDialog';
+import ChildHeader from '../childTable/childHeader';
+import { getComparator, stableSort } from '../sortTable';
 import { convert } from '~/pages/Dashboard/components/share';
 
-function CollapseRow(props) {
+function ChildRow(props) {
     const data = props.data;
     const [open, setOpen] = React.useState(false);
-    const [childData, setchildData] = React.useState(dl_mau);
+    const [childData, setchildData] = React.useState([]);
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('ID');
     const [selected, setSelected] = React.useState([]);
@@ -95,16 +92,6 @@ function CollapseRow(props) {
                 // onClick={(event) => handleOpen(event)}
                 onContextMenu={handleContextMenu}
             >
-                <TableCell padding="checkbox">
-                    <Checkbox
-                        color="primary"
-                        checked={props.isItemSelected}
-                        onClick={props.onClick}
-                        inputProps={{
-                            'aria-labelledby': props.labelId,
-                        }}
-                    />
-                </TableCell>
                 <TableCell component="th" id={props.labelId} scope="row" padding="none" align="right">
                     {data.ID}
                 </TableCell>
@@ -180,7 +167,7 @@ function CollapseRow(props) {
     );
 }
 
-CollapseRow.propTypes = {
+ChildRow.propTypes = {
     data: PropTypes.shape({
         ID: PropTypes.number.isRequired,
         TEN_CV: PropTypes.string.isRequired,
@@ -191,4 +178,4 @@ CollapseRow.propTypes = {
     }).isRequired,
 };
 
-export default CollapseRow;
+export default ChildRow;

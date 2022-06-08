@@ -31,6 +31,13 @@ function FormDialog() {
     const [evalutes, setEvalutes] = React.useState([]);
     const [endDate, setEndDate] = React.useState(new Date());
 
+    function convert(str) {
+        var date = new Date(str),
+            mnth = ('0' + (date.getMonth() + 1)).slice(-2),
+            day = ('0' + date.getDate()).slice(-2);
+        return [day, mnth, date.getFullYear()].join('/');
+    }
+
     const handlePickDate = (newDate) => {
         setEndDate(newDate);
     };
@@ -41,19 +48,14 @@ function FormDialog() {
         setLevels(res_level);
         const res_evalute = await evaluteApi.getAll();
         setEvalutes(res_evalute);
-        // console.log(res);
     };
-
-    function convert(str) {
-        var date = new Date(str),
-            mnth = ('0' + (date.getMonth() + 1)).slice(-2),
-            day = ('0' + date.getDate()).slice(-2);
-        return [day, mnth, date.getFullYear()].join('/');
-    }
 
     const handleClose = () => {
         setLevels([]);
         setLevel('');
+        setEvalutes([]);
+        setEvalute('');
+        setEndDate(new Date());
         setOpen(false);
     };
 
@@ -67,7 +69,6 @@ function FormDialog() {
             CREATE_AT: convert(new Date().toString()),
             UPDATE_AT: convert(new Date().toString()),
         };
-        console.log(data);
         const res = await worksApi.createWork(data);
         console.log(res);
 
@@ -131,7 +132,9 @@ function FormDialog() {
                                     value={endDate}
                                     minDate={new Date('2017-01-01')}
                                     onChange={handlePickDate}
+                                    inputFormat="dd/MM/yyyy"
                                     renderInput={(params) => <TextField {...params} />}
+                                    disableMaskedInput
                                 />
                             </LocalizationProvider>
                         </Grid>

@@ -2,11 +2,10 @@ import PropTypes from 'prop-types';
 import TableHead from '@mui/material/TableHead';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
 import Checkbox from '@mui/material/Checkbox';
 import { visuallyHidden } from '@mui/utils';
 import Box from '@mui/material/Box';
-import { headCells } from '~/pages/Dashboard/components/share';
+import { headCells, StyledTableCell } from '~/pages/Dashboard/components/share';
 
 function EnhancedTableHead(props) {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
@@ -17,7 +16,7 @@ function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding="checkbox">
+                <StyledTableCell padding="checkbox">
                     <Checkbox
                         color="primary"
                         indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -27,9 +26,9 @@ function EnhancedTableHead(props) {
                             'aria-label': 'select all desserts',
                         }}
                     />
-                </TableCell>
+                </StyledTableCell>
                 {headCells.map((headCell) => (
-                    <TableCell
+                    <StyledTableCell
                         key={headCell.id}
                         align={headCell.numeric ? 'right' : 'left'}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
@@ -48,8 +47,10 @@ function EnhancedTableHead(props) {
                                 </Box>
                             ) : null}
                         </TableSortLabel>
-                    </TableCell>
+                    </StyledTableCell>
                 ))}
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
             </TableRow>
         </TableHead>
     );

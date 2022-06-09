@@ -1,3 +1,6 @@
+import { styled } from '@mui/material/styles';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+
 //constants
 export const headCells = [
     {
@@ -72,3 +75,11 @@ export function convert(str) {
         day = ('0' + date.getDate()).slice(-2);
     return [day, mnth, date.getFullYear()].join('/');
 }
+
+//styles
+export const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+        backgroundColor: theme.palette.info.light,
+        color: theme.palette.common.white,
+    },
+}));

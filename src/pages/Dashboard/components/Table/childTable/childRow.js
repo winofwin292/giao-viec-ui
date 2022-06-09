@@ -20,7 +20,7 @@ import { convert } from '~/pages/Dashboard/components/share';
 function ChildRow(props) {
     const data = props.data;
     const [open, setOpen] = React.useState(false);
-    const [childData, setchildData] = React.useState([]);
+    const [childData, setChildData] = React.useState([]);
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('ID');
     const [selected, setSelected] = React.useState([]);
@@ -45,11 +45,18 @@ function ChildRow(props) {
     const handleOpen = async (event, id) => {
         event.preventDefault();
         setOpen(!open);
+        const data_req = {
+            WORK_ID: id,
+        };
         if (open === false) {
-            // const res = await worksApi.getById(data_req);
-            // setChildData(res);
+            console.log('show');
+            const res = await worksApi.getChild(data_req);
+            // console.log(res);
+            setChildData(res);
         } else {
-            // setChildData([]);
+            console.log('end show');
+
+            setChildData([]);
         }
     };
 
@@ -103,17 +110,13 @@ function ChildRow(props) {
                 <TableCell align="left">{data.IS_SEEN === 1 ? 'Đã xem' : 'Chưa xem'}</TableCell>
                 <TableCell align="left">{data.TEN_NGUOI_NHAN === '' ? 'Chưa giao' : data.TEN_NGUOI_NHAN}</TableCell>
                 <TableCell align="left">{data.TOTAL_TIME}</TableCell>
-                {childData.length !== 0 && (
-                    <TableCell>
-                        <IconButton
-                            aria-label="expand row"
-                            size="small"
-                            onClick={(event) => handleOpen(event, data.ID)}
-                        >
-                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                        </IconButton>
-                    </TableCell>
-                )}
+                {/* {childData.length !== 0 && ( */}
+                <TableCell>
+                    <IconButton aria-label="expand row" size="small" onClick={(event) => handleOpen(event, data.ID)}>
+                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                    </IconButton>
+                </TableCell>
+                {/* )} */}
                 <TableCell>
                     <DetailDialog id={data.ID} />
                 </TableCell>

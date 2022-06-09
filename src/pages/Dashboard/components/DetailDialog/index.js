@@ -13,6 +13,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import worksApi from '~/api/Works/worksApi';
+import { convert } from '~/pages/Dashboard/components/share';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -62,6 +63,7 @@ export default function DetailDialog(props) {
         };
         setOpen(true);
         const res = await worksApi.getById(data_req);
+        console.log(res);
         setChildData(res);
     };
     const handleClose = () => {
@@ -74,7 +76,13 @@ export default function DetailDialog(props) {
             <IconButton aria-label="expand row" size="small" onClick={(e) => handleClickOpen(e)}>
                 <InfoIcon />
             </IconButton>
-            <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+            <BootstrapDialog
+                fullWidth
+                maxWidth="lg"
+                onClose={handleClose}
+                aria-labelledby="customized-dialog-title"
+                open={open}
+            >
                 <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
                     Chi tiết giao việc
                 </BootstrapDialogTitle>
@@ -88,6 +96,8 @@ export default function DetailDialog(props) {
                                 <TableCell>Tên người nhận</TableCell>
                                 <TableCell align="right">Kiểu công việc</TableCell>
                                 <TableCell align="right">Nội dung</TableCell>
+                                <TableCell align="right">Ngày bắt đầu</TableCell>
+                                <TableCell align="right">Ngày kết thúc</TableCell>
                                 <TableCell align="right">Tổng thời gian</TableCell>
                             </TableRow>
                         </TableHead>
@@ -100,6 +110,8 @@ export default function DetailDialog(props) {
                                     <TableCell>{childRow.TEN_NGUOI_NHAN}</TableCell>
                                     <TableCell align="right">{childRow.NAME_WORK_TYPES}</TableCell>
                                     <TableCell align="right">{childRow.COMMENT_WORK_RECEIVE}</TableCell>
+                                    <TableCell align="right">{convert(childRow.BEGIN_DATE_AT)}</TableCell>
+                                    <TableCell align="right">{convert(childRow.END_DATE_AT)}</TableCell>
                                     <TableCell align="right">{childRow.TOTAL_TIME}</TableCell>
                                 </TableRow>
                             ))}

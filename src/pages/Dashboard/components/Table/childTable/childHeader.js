@@ -2,10 +2,9 @@ import PropTypes from 'prop-types';
 import TableHead from '@mui/material/TableHead';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
 import { visuallyHidden } from '@mui/utils';
 import Box from '@mui/material/Box';
-import { headCells } from '~/pages/Dashboard/components/share';
+import { headCells, StyledTableCell } from '~/pages/Dashboard/components/share';
 
 function ChildHeader(props) {
     const { order, orderBy, onRequestSort } = props;
@@ -18,7 +17,7 @@ function ChildHeader(props) {
         <TableHead>
             <TableRow>
                 {headCells.map((headCell) => (
-                    <TableCell
+                    <StyledTableCell
                         key={headCell.id}
                         align={headCell.numeric ? 'right' : 'left'}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
@@ -37,8 +36,10 @@ function ChildHeader(props) {
                                 </Box>
                             ) : null}
                         </TableSortLabel>
-                    </TableCell>
+                    </StyledTableCell>
                 ))}
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
             </TableRow>
         </TableHead>
     );

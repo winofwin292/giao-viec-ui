@@ -25,7 +25,7 @@ export default function SelectAutoWidth(props) {
                 </MenuItem>
                 {props.data.map((item) => (
                     <MenuItem key={item.ID} value={item.ID}>
-                        {item.NAME_WORK_LEVELS || item.NAME_WORK_EVALUTES}
+                        {item[props.contentKey]}
                     </MenuItem>
                 ))}
             </Select>

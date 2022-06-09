@@ -12,7 +12,7 @@ import { getComparator, stableSort } from './sortTable';
 import EnhancedTableToolbar from './toolbarTable';
 import CollapseRow from './collapseRow';
 import worksApi from '~/api/Works/worksApi';
-import FormDialog from '../FormDialog';
+import AddWorkForm from '../AddWorkForm';
 
 export default function EnhancedTable() {
     const [order, setOrder] = React.useState('asc');
@@ -85,7 +85,7 @@ export default function EnhancedTable() {
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ marginBottom: '10px', width: '100%', mb: 2, p: 2 }}>
-                <FormDialog sx={{ padding: '10px' }} />
+                <AddWorkForm sx={{ padding: '10px' }} />
             </Paper>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <EnhancedTableToolbar numSelected={selected.length} />

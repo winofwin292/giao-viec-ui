@@ -14,6 +14,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import worksApi from '~/api/Works/worksApi';
 import EditWorkReceived from '../EditWorkReceived';
+import AddWorkForm from '../AddWorkForm';
 import { convert } from '~/pages/Dashboard/components/share';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -54,7 +55,7 @@ BootstrapDialogTitle.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-export default function DetailDialog(props) {
+function DetailDialog(props) {
     const [open, setOpen] = React.useState(false);
     const [childData, setChildData] = React.useState([]);
 
@@ -126,6 +127,16 @@ export default function DetailDialog(props) {
                                             }}
                                         />
                                     </TableCell>
+                                    <TableCell>
+                                        <AddWorkForm
+                                            miniButton={true}
+                                            data={{
+                                                WORK_ID: props.id,
+                                                WORK_RECEIVE_ID: childRow.ID,
+                                                USER_ID: childRow.USER_ID,
+                                            }}
+                                        />
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -136,3 +147,5 @@ export default function DetailDialog(props) {
         </div>
     );
 }
+
+export default DetailDialog;

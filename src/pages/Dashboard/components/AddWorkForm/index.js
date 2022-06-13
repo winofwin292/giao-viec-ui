@@ -6,6 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
+import AddTaskIcon from '@mui/icons-material/AddTask';
 import Slide from '@mui/material/Slide';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -27,7 +28,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function AddWorkForm() {
+function AddWorkForm(props) {
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState('');
     const [level, setLevel] = React.useState('');
@@ -47,6 +48,7 @@ function AddWorkForm() {
         setLevels(res_level);
         const res_evalute = await evaluteApi.getAll();
         setEvalutes(res_evalute);
+        if (props.data) console.log(props.data);
     };
 
     const handleClose = () => {
@@ -61,13 +63,15 @@ function AddWorkForm() {
 
     const handleSave = async () => {
         const data = {
-            USER_ID: 1,
+            USER_ID: props.data.USER_ID ? props.data.USER_ID : 1,
             WORK_LEVEL_ID: level,
             WORK_EVALUTE_ID: evalute,
             NAME_WORKS: name,
             END_DATE_AT: convert(endDate.toString()),
             CREATED_AT: convert(new Date().toString()),
             UPDATED_AT: convert(new Date().toString()),
+            WORK_RECEIVE_ID: props.data.WORK_RECEIVE_ID ? props.data.WORK_RECEIVE_ID : null,
+            WORK_ID: props.data.WORK_ID ? props.data.WORK_ID : null,
             WORK_RECEIVES: received,
         };
         console.log(data);
@@ -79,16 +83,23 @@ function AddWorkForm() {
         setEvalute('');
         setEndDate(new Date());
 
-        // setLevel('');
-        // setEvalute('');
-        // setOpen(false);
+        setLevel('');
+        setEvalute('');
+        setOpen(false);
     };
 
     return (
         <div>
-            <Button variant="outlined" onClick={handleClickOpen} startIcon={<AddCircleIcon />}>
-                Thêm công việc
-            </Button>
+            {props.miniButton === true ? (
+                <IconButton aria-label="expand row" size="small" onClick={handleClickOpen}>
+                    <AddTaskIcon />
+                </IconButton>
+            ) : (
+                <Button variant="outlined" onClick={handleClickOpen} startIcon={<AddCircleIcon />}>
+                    Thêm công việc
+                </Button>
+            )}
+
             <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
                 <AppBar sx={{ position: 'relative' }}>
                     <Toolbar>

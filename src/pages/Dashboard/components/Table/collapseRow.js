@@ -53,13 +53,12 @@ function CollapseRow(props) {
         };
 
         if (open === false) {
-            console.log('show');
+            // console.log('show');
             const res = await worksApi.getChild(data_req);
             // console.log(res);
             setChildData(res);
         } else {
-            console.log('end show');
-
+            // console.log('end show');
             setChildData([]);
         }
     };

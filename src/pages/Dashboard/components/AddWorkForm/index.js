@@ -10,6 +10,8 @@ import Slide from '@mui/material/Slide';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
+import SaveIcon from '@mui/icons-material/Save';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -54,6 +56,7 @@ function AddWorkForm() {
         setEvalute('');
         setEndDate(new Date());
         setOpen(false);
+        setReceived([]);
     };
 
     const handleSave = async () => {
@@ -70,6 +73,11 @@ function AddWorkForm() {
         console.log(data);
         const res = await worksApi.createWork(data);
         console.log(res);
+        setReceived([]);
+        setName('');
+        setLevel('');
+        setEvalute('');
+        setEndDate(new Date());
 
         // setLevel('');
         // setEvalute('');
@@ -78,7 +86,7 @@ function AddWorkForm() {
 
     return (
         <div>
-            <Button variant="outlined" onClick={handleClickOpen}>
+            <Button variant="outlined" onClick={handleClickOpen} startIcon={<AddCircleIcon />}>
                 Thêm công việc
             </Button>
             <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
@@ -90,7 +98,13 @@ function AddWorkForm() {
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                             Thêm mới công việc
                         </Typography>
-                        <Button autoFocus color="inherit" onClick={handleSave}>
+                        <Button
+                            autoFocus
+                            variant="outlined"
+                            color="inherit"
+                            onClick={handleSave}
+                            endIcon={<SaveIcon />}
+                        >
                             Lưu
                         </Button>
                     </Toolbar>
@@ -131,7 +145,7 @@ function AddWorkForm() {
                                 <DesktopDatePicker
                                     label="Ngày hết hạn"
                                     value={endDate}
-                                    minDate={new Date('2017-01-01')}
+                                    minDate={new Date()}
                                     onChange={handlePickDate}
                                     inputFormat="dd/MM/yyyy"
                                     renderInput={(params) => <TextField {...params} />}

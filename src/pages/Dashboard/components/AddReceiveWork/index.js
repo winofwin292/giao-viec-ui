@@ -2,13 +2,13 @@ import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 
 const columns = [
-    { field: 'USER_ID', headerName: 'ID', width: 70 },
-    { field: 'NAME_USER', headerName: 'Tên', width: 130 },
-    { field: 'WORK_TYPE_NAME', headerName: 'Loại công việc', width: 130 },
-    { field: 'WORK_EVALUTE_NAME', headerName: 'Mức độ đánh giá', width: 130 },
-    { field: 'COMMENT', headerName: 'Nội dung', width: 130 },
-    { field: 'BEGIN_DATE_AT', headerName: 'Ngày bắt đầu', width: 130 },
-    { field: 'END_DATE_AT', headerName: 'Ngày kết thúc', width: 130 },
+    { field: 'USER_ID', headerName: 'ID', width: 100 },
+    { field: 'NAME_USER', headerName: 'Tên', width: 250 },
+    { field: 'WORK_TYPE_NAME', headerName: 'Loại công việc', width: 180 },
+    { field: 'WORK_EVALUTE_NAME', headerName: 'Mức độ đánh giá', width: 180 },
+    { field: 'COMMENT', headerName: 'Nội dung', width: 300 },
+    { field: 'BEGIN_DATE_AT', headerName: 'Ngày bắt đầu', width: 170 },
+    { field: 'END_DATE_AT', headerName: 'Ngày kết thúc', width: 170 },
 ];
 
 function AddReceiveWork(props) {

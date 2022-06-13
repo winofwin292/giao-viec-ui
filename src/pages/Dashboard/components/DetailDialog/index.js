@@ -13,6 +13,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import worksApi from '~/api/Works/worksApi';
+import EditWorkReceived from '../EditWorkReceived';
 import { convert } from '~/pages/Dashboard/components/share';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -63,7 +64,7 @@ export default function DetailDialog(props) {
         };
         setOpen(true);
         const res = await worksApi.getById(data_req);
-        console.log(res);
+        // console.log(res);
         setChildData(res);
     };
     const handleClose = () => {
@@ -113,6 +114,18 @@ export default function DetailDialog(props) {
                                     <TableCell align="right">{convert(childRow.BEGIN_DATE_AT)}</TableCell>
                                     <TableCell align="right">{convert(childRow.END_DATE_AT)}</TableCell>
                                     <TableCell align="right">{childRow.TOTAL_TIME}</TableCell>
+                                    <TableCell align="right">
+                                        <EditWorkReceived
+                                            data={{
+                                                ID: childRow.ID,
+                                                USER_ID: childRow.USER_ID,
+                                                TEN_NGUOI_NHAN: childRow.TEN_NGUOI_NHAN,
+                                                COMMENT_WORK_RECEIVE: childRow.COMMENT_WORK_RECEIVE,
+                                                BEGIN_DATE_AT: childRow.BEGIN_DATE_AT,
+                                                END_DATE_AT: childRow.END_DATE_AT,
+                                            }}
+                                        />
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

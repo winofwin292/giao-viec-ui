@@ -14,7 +14,7 @@ import CollapseRow from './collapseRow';
 import worksApi from '~/api/Works/worksApi';
 import AddWorkForm from '../AddWorkForm';
 
-export default function EnhancedTable() {
+function EnhancedTable() {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('ID');
     const [selected, setSelected] = React.useState([]);
@@ -141,3 +141,5 @@ export default function EnhancedTable() {
         </Box>
     );
 }
+
+export default EnhancedTable;

@@ -5,7 +5,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import CheckIcon from '@mui/icons-material/Check';
 import Button from '@mui/material/Button';
 import SelectAutoWidth from '../SelectAutoWidth';
@@ -15,9 +15,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import evaluteApi from '~/api/Evalutes/evaluteApi';
 import userApi from '~/api/Users/useApi';
-import typeApi from '~/api/Types/typeApi';
+import workReceivesApi from '~/api/WorkReceives/workReceivesApi';
 import { convert } from '../share';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -58,32 +57,34 @@ BootstrapDialogTitle.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-function AddReceiveDialog(props) {
+function EditWorkReceived(props) {
+    const oldData = props.data;
     const [open, setOpen] = React.useState(false);
-    const [comment, setComment] = React.useState('');
-    const [evalute, setEvalute] = React.useState('');
-    const [evalutes, setEvalutes] = React.useState([]);
-    const [type, setType] = React.useState('');
-    const [types, setTypes] = React.useState([]);
+    const [comment, setComment] = React.useState(oldData.COMMENT_WORK_RECEIVE);
+    // const [evalute, setEvalute] = React.useState('');
+    // const [evalutes, setEvalutes] = React.useState([]);
+    // const [type, setType] = React.useState('');
+    // const [types, setTypes] = React.useState([]);
     const [userID, setUserID] = React.useState('');
+    const [beginDate, setBeginDate] = React.useState(new Date(oldData.BEGIN_DATE_AT));
+    const [endDate, setEndDate] = React.useState(new Date(oldData.END_DATE_AT));
     const [users, setUsers] = React.useState([]);
-    const [beginDate, setBeginDate] = React.useState(new Date());
-    const [endDate, setEndDate] = React.useState(new Date());
 
     const handleClickOpen = async () => {
         setOpen(true);
-        const res_evalute = await evaluteApi.getAll();
-        setEvalutes(res_evalute);
-        const res_type = await typeApi.getAll();
-        setTypes(res_type);
+        // const res_evalute = await evaluteApi.getAll();
+        // setEvalutes(res_evalute);
+        // const res_type = await typeApi.getAll();
+        // setTypes(res_type);
         const res_user = await userApi.getAll();
         setUsers(res_user);
+        setUserID(oldData.USER_ID);
     };
     const handleClose = () => {
-        setEvalutes([]);
-        setEvalute('');
-        setTypes([]);
-        setType('');
+        // setEvalutes([]);
+        // setEvalute('');
+        // setTypes([]);
+        // setType('');
         setUsers([]);
         setUserID('');
         setBeginDate(new Date());
@@ -97,29 +98,30 @@ function AddReceiveDialog(props) {
         setEndDate(newDate);
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const newObj = {
+            ID: oldData.ID,
             USER_ID: userID,
-            NAME_USER: users.filter((item) => item.ID === userID)[0].NAME_USERS,
-            WORK_TYPE_ID: type,
-            WORK_TYPE_NAME: types.filter((item) => item.ID === type)[0].NAME_WORK_TYPES,
-            WORK_EVALUTE_ID: evalute,
-            WORK_EVALUTE_NAME: evalutes.filter((item) => item.ID === evalute)[0].NAME_WORK_EVALUTES,
+            // WORK_TYPE_ID: type,
+            // WORK_TYPE_NAME: types.filter((item) => item.ID === type)[0].NAME_WORK_TYPES,
+            // WORK_EVALUTE_ID: evalute,
+            // WORK_EVALUTE_NAME: evalutes.filter((item) => item.ID === evalute)[0].NAME_WORK_EVALUTES,
             COMMENT_WORK_RECEIVE: comment,
             BEGIN_DATE_AT: convert(beginDate.toString()),
             END_DATE_AT: convert(endDate.toString()),
-            CREATED_AT: convert(new Date().toString()),
-            UPDATED_AT: convert(new Date().toString()),
         };
-        props.onSubmit((prev) => [...prev, newObj]);
+        console.log(newObj);
+
+        const res = await workReceivesApi.update(newObj);
+        console.log(res);
         handleClose();
     };
 
     return (
         <div>
-            <Button variant="contained" onClick={handleClickOpen} sx={{ m: 2 }} startIcon={<AddCircleIcon />}>
-                Thêm người nhận việc
-            </Button>
+            <IconButton aria-label="expand row" size="small" onClick={handleClickOpen}>
+                <ModeEditIcon />{' '}
+            </IconButton>
             <BootstrapDialog
                 fullWidth
                 maxWidth="lg"
@@ -153,10 +155,11 @@ function AddReceiveDialog(props) {
                             <TextField
                                 fullWidth
                                 label="Nội dung công việc"
+                                value={comment}
                                 onChange={(e) => setComment(e.target.value)}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        {/* <Grid item xs={6}>
                             <SelectAutoWidth
                                 data={types}
                                 onChange={setType}
@@ -164,8 +167,8 @@ function AddReceiveDialog(props) {
                                 contentKey="NAME_WORK_TYPES"
                                 label="Chọn loại công việc"
                             />
-                        </Grid>
-                        <Grid item xs={6}>
+                        </Grid> */}
+                        {/* <Grid item xs={6}>
                             <SelectAutoWidth
                                 data={evalutes}
                                 onChange={setEvalute}
@@ -173,13 +176,13 @@ function AddReceiveDialog(props) {
                                 contentKey="NAME_WORK_EVALUTES"
                                 label="Chọn mức độ đánh giá công việc"
                             />
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs={6}>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DesktopDatePicker
                                     label="Ngày bắt đầu"
                                     value={beginDate}
-                                    minDate={new Date()}
+                                    minDate={new Date(oldData.BEGIN_DATE_AT)}
                                     onChange={handlePickBeginDate}
                                     inputFormat="dd/MM/yyyy"
                                     renderInput={(params) => <TextField {...params} />}
@@ -217,4 +220,4 @@ function AddReceiveDialog(props) {
     );
 }
 
-export default AddReceiveDialog;
+export default EditWorkReceived;

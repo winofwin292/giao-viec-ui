@@ -109,7 +109,7 @@ function DetailDialog(props) {
                                     <TableCell component="th" scope="row">
                                         {index + 1}
                                     </TableCell>
-                                    <TableCell>{childRow.TEN_NGUOI_NHAN}</TableCell>
+                                    <TableCell>{childRow.NAME_RECEIVERS}</TableCell>
                                     <TableCell align="right">{childRow.NAME_WORK_TYPES}</TableCell>
                                     <TableCell align="right">{childRow.COMMENT_WORK_RECEIVE}</TableCell>
                                     <TableCell align="right">{convert(childRow.BEGIN_DATE_AT)}</TableCell>
@@ -120,7 +120,7 @@ function DetailDialog(props) {
                                             data={{
                                                 ID: childRow.ID,
                                                 USER_ID: childRow.USER_ID,
-                                                TEN_NGUOI_NHAN: childRow.TEN_NGUOI_NHAN,
+                                                TEN_NGUOI_NHAN: childRow.NAME_RECEIVERS,
                                                 COMMENT_WORK_RECEIVE: childRow.COMMENT_WORK_RECEIVE,
                                                 BEGIN_DATE_AT: childRow.BEGIN_DATE_AT,
                                                 END_DATE_AT: childRow.END_DATE_AT,

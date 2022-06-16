@@ -21,6 +21,7 @@ import levelApi from '~/api/Levels/levelApi';
 import worksApi from '~/api/Works/worksApi';
 import AddReceiveWork from '../AddReceiveWork';
 import AddReceiveDialog from '../AddReceiveDialog';
+import userApi from '~/api/Users/useApi';
 import { convert } from '../share';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -40,6 +41,7 @@ function AddWorkForm(props) {
     const [beginDate, setBeginDate] = React.useState(new Date());
     const [endDate, setEndDate] = React.useState(new Date());
     const [received, setReceived] = React.useState([]);
+    const [users, setUsers] = React.useState([]);
 
     const handleBeginDate = (newDate) => {
         setBeginDate(newDate);
@@ -52,6 +54,8 @@ function AddWorkForm(props) {
         setOpen(true);
         const res_level = await levelApi.getAll();
         setLevels(res_level);
+        const res_user = await userApi.getAll();
+        setUsers(res_user);
     };
 
     const handleClose = () => {
@@ -78,7 +82,7 @@ function AddWorkForm(props) {
             WORK_ID: cWorkId,
             WORK_RECEIVES: received,
         };
-        console.log(data);
+        // console.log(data);
         const res = await worksApi.createWork(data);
         console.log(res);
 
@@ -153,7 +157,7 @@ function AddWorkForm(props) {
                                         label="Chọn loại công việc"
                                     />
                                 </Grid>
-                                <Grid container direction="row" spacing={1} sx={{ p: 1 }}>
+                                <Grid container direction="row">
                                     <Grid item xs={5.7}>
                                         <DesktopDatePicker
                                             label="Ngày bắt đầu"
@@ -166,7 +170,7 @@ function AddWorkForm(props) {
                                             disableMaskedInput
                                         />
                                     </Grid>
-                                    <Grid item xs={5.8}>
+                                    <Grid item xs={5.7}>
                                         <DesktopDatePicker
                                             label="Ngày hết hạn"
                                             value={endDate}
@@ -194,7 +198,7 @@ function AddWorkForm(props) {
                                 />
                             </Grid>
                             <Grid item xs={12} sx={{ height: '240px', m: 2 }}>
-                                <AddReceiveWork dataTable={received} />
+                                <AddReceiveWork dataTable={users} />
                             </Grid>
                             <Grid item xs={12} sx={{ m: '0 2' }}>
                                 <AddReceiveDialog onSubmit={setReceived} endDate={endDate} />

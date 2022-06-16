@@ -15,7 +15,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import evaluteApi from '~/api/Evalutes/evaluteApi';
 import userApi from '~/api/Users/useApi';
 import typeApi from '~/api/Types/typeApi';
 import { convert } from '../share';
@@ -80,6 +79,7 @@ function AddReceiveDialog(props) {
         setType('');
         setUsers([]);
         setUserID('');
+        setComment('');
         setBeginDate(new Date());
         setEndDate(new Date());
         setOpen(false);

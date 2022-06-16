@@ -49,8 +49,8 @@ function EnhancedTableHead(props) {
                         </TableSortLabel>
                     </StyledTableCell>
                 ))}
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell></StyledTableCell>
+                <StyledTableCell style={{ minWidth: 20 }} padding="none"></StyledTableCell>
+                <StyledTableCell style={{ minWidth: 20 }} padding="none"></StyledTableCell>
             </TableRow>
         </TableHead>
     );

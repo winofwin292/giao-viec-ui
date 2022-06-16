@@ -55,6 +55,11 @@ function CollapseRow(props) {
         if (open === false) {
             // console.log('show');
             const res = await worksApi.getChild(data_req);
+            var i = 1;
+            res.forEach((item) => {
+                item.STT = i;
+                i++;
+            });
             // console.log(res);
             setChildData(res);
         } else {
@@ -113,15 +118,15 @@ function CollapseRow(props) {
                     />
                 </TableCell>
                 <TableCell component="th" id={props.labelId} scope="row" padding="none" align="right">
-                    {data.ID}
+                    {data.STT}
                 </TableCell>
-                <TableCell align="left">{data.TEN_CV}</TableCell>
-                <TableCell align="left">{data.TEN_NGUOI_TAO}</TableCell>
-                <TableCell align="left">{data.LOAI_CV}</TableCell>
-                <TableCell align="left">{convert(data.TG_TAO)}</TableCell>
-                <TableCell align="left">{convert(data.TG_HET_HAN)}</TableCell>
+                <TableCell align="left">{data.NAME_WORKS}</TableCell>
+                <TableCell align="left">{data.NAME_USERS}</TableCell>
+                <TableCell align="left">{data.NAME_WORK_LEVELS}</TableCell>
+                <TableCell align="left">{convert(data.BEGIN_DATE_AT)}</TableCell>
+                <TableCell align="left">{convert(data.END_DATE_AT)}</TableCell>
                 <TableCell align="left">{data.IS_SEEN === 1 ? 'Đã xem' : 'Chưa xem'}</TableCell>
-                <TableCell align="left">{data.TEN_NGUOI_NHAN === '' ? 'Chưa giao' : data.TEN_NGUOI_NHAN}</TableCell>
+                <TableCell align="left">{data.NAME_RECEIVERS === '' ? 'Chưa giao' : data.NAME_RECEIVERS}</TableCell>
                 <TableCell align="left">{data.TOTAL_TIME}</TableCell>
                 {/* {childData.length !== 0 && ( */}
                 <TableCell>
@@ -148,7 +153,6 @@ function CollapseRow(props) {
                                 />
                                 <TableBody>
                                     {stableSort(childData, getComparator(order, orderBy)).map((row, index) => {
-                                        row.STT = index + 1;
                                         return (
                                             <ChildRow
                                                 key={row.ID}
@@ -186,11 +190,11 @@ function CollapseRow(props) {
 CollapseRow.propTypes = {
     data: PropTypes.shape({
         ID: PropTypes.number.isRequired,
-        TEN_CV: PropTypes.string.isRequired,
-        TEN_NGUOI_TAO: PropTypes.string.isRequired,
-        LOAI_CV: PropTypes.string.isRequired,
-        TG_TAO: PropTypes.string.isRequired,
-        TG_HET_HAN: PropTypes.string.isRequired,
+        NAME_WORKS: PropTypes.string.isRequired,
+        NAME_USERS: PropTypes.string.isRequired,
+        NAME_WORK_LEVELS: PropTypes.string.isRequired,
+        BEGIN_DATE_AT: PropTypes.string.isRequired,
+        END_DATE_AT: PropTypes.string.isRequired,
     }).isRequired,
 };
 

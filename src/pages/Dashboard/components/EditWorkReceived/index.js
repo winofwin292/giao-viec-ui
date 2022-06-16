@@ -61,10 +61,6 @@ function EditWorkReceived(props) {
     const oldData = props.data;
     const [open, setOpen] = React.useState(false);
     const [comment, setComment] = React.useState(oldData.COMMENT_WORK_RECEIVE);
-    // const [evalute, setEvalute] = React.useState('');
-    // const [evalutes, setEvalutes] = React.useState([]);
-    // const [type, setType] = React.useState('');
-    // const [types, setTypes] = React.useState([]);
     const [userID, setUserID] = React.useState('');
     const [beginDate, setBeginDate] = React.useState(new Date(oldData.BEGIN_DATE_AT));
     const [endDate, setEndDate] = React.useState(new Date(oldData.END_DATE_AT));
@@ -72,19 +68,11 @@ function EditWorkReceived(props) {
 
     const handleClickOpen = async () => {
         setOpen(true);
-        // const res_evalute = await evaluteApi.getAll();
-        // setEvalutes(res_evalute);
-        // const res_type = await typeApi.getAll();
-        // setTypes(res_type);
         const res_user = await userApi.getAll();
         setUsers(res_user);
         setUserID(oldData.USER_ID);
     };
     const handleClose = () => {
-        // setEvalutes([]);
-        // setEvalute('');
-        // setTypes([]);
-        // setType('');
         setUsers([]);
         setUserID('');
         setBeginDate(new Date());
@@ -102,10 +90,6 @@ function EditWorkReceived(props) {
         const newObj = {
             ID: oldData.ID,
             USER_ID: userID,
-            // WORK_TYPE_ID: type,
-            // WORK_TYPE_NAME: types.filter((item) => item.ID === type)[0].NAME_WORK_TYPES,
-            // WORK_EVALUTE_ID: evalute,
-            // WORK_EVALUTE_NAME: evalutes.filter((item) => item.ID === evalute)[0].NAME_WORK_EVALUTES,
             COMMENT_WORK_RECEIVE: comment,
             BEGIN_DATE_AT: convert(beginDate.toString()),
             END_DATE_AT: convert(endDate.toString()),
@@ -159,24 +143,6 @@ function EditWorkReceived(props) {
                                 onChange={(e) => setComment(e.target.value)}
                             />
                         </Grid>
-                        {/* <Grid item xs={6}>
-                            <SelectAutoWidth
-                                data={types}
-                                onChange={setType}
-                                selected={type}
-                                contentKey="NAME_WORK_TYPES"
-                                label="Chọn loại công việc"
-                            />
-                        </Grid> */}
-                        {/* <Grid item xs={6}>
-                            <SelectAutoWidth
-                                data={evalutes}
-                                onChange={setEvalute}
-                                selected={evalute}
-                                contentKey="NAME_WORK_EVALUTES"
-                                label="Chọn mức độ đánh giá công việc"
-                            />
-                        </Grid> */}
                         <Grid item xs={6}>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DesktopDatePicker

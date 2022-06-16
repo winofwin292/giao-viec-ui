@@ -134,6 +134,7 @@ function DetailDialog(props) {
                                                 WORK_ID: props.id,
                                                 WORK_RECEIVE_ID: childRow.ID,
                                                 USER_ID: childRow.USER_ID,
+                                                END_DATE_AT: childRow.END_DATE_AT,
                                             }}
                                         />
                                     </TableCell>

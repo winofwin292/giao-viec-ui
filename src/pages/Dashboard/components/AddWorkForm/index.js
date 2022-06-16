@@ -18,7 +18,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import SelectAutoWidth from '../SelectAutoWidth';
 import levelApi from '~/api/Levels/levelApi';
-import evaluteApi from '~/api/Evalutes/evaluteApi';
 import worksApi from '~/api/Works/worksApi';
 import AddReceiveWork from '../AddReceiveWork';
 import AddReceiveDialog from '../AddReceiveDialog';
@@ -29,16 +28,23 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function AddWorkForm(props) {
+    const cUserId = props.data?.USER_ID ? props.data?.USER_ID : 1;
+    const cWorkReceiveId = props.data?.WORK_RECEIVE_ID ? props.data?.WORK_RECEIVE_ID : null;
+    const cWorkId = props.data?.WORK_ID ? props.data?.WORK_ID : null;
+
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState('');
+    const [note, setNote] = React.useState('');
     const [level, setLevel] = React.useState('');
     const [levels, setLevels] = React.useState([]);
-    const [evalute, setEvalute] = React.useState('');
-    const [evalutes, setEvalutes] = React.useState([]);
+    const [beginDate, setBeginDate] = React.useState(new Date());
     const [endDate, setEndDate] = React.useState(new Date());
     const [received, setReceived] = React.useState([]);
 
-    const handlePickDate = (newDate) => {
+    const handleBeginDate = (newDate) => {
+        setBeginDate(newDate);
+    };
+    const handleEndDate = (newDate) => {
         setEndDate(newDate);
     };
 
@@ -46,16 +52,13 @@ function AddWorkForm(props) {
         setOpen(true);
         const res_level = await levelApi.getAll();
         setLevels(res_level);
-        const res_evalute = await evaluteApi.getAll();
-        setEvalutes(res_evalute);
-        if (props.data) console.log(props.data);
     };
 
     const handleClose = () => {
         setLevels([]);
         setLevel('');
-        setEvalutes([]);
-        setEvalute('');
+        setNote('');
+        setBeginDate(new Date());
         setEndDate(new Date());
         setOpen(false);
         setReceived([]);
@@ -63,116 +66,143 @@ function AddWorkForm(props) {
 
     const handleSave = async () => {
         const data = {
-            USER_ID: props.data.USER_ID ? props.data.USER_ID : 1,
+            USER_ID: cUserId,
             WORK_LEVEL_ID: level,
-            WORK_EVALUTE_ID: evalute,
             NAME_WORKS: name,
+            NOTE: note,
+            BEGIN_DATE_AT: convert(beginDate.toString()),
             END_DATE_AT: convert(endDate.toString()),
             CREATED_AT: convert(new Date().toString()),
             UPDATED_AT: convert(new Date().toString()),
-            WORK_RECEIVE_ID: props.data.WORK_RECEIVE_ID ? props.data.WORK_RECEIVE_ID : null,
-            WORK_ID: props.data.WORK_ID ? props.data.WORK_ID : null,
+            WORK_RECEIVE_ID: cWorkReceiveId,
+            WORK_ID: cWorkId,
             WORK_RECEIVES: received,
         };
         console.log(data);
         const res = await worksApi.createWork(data);
         console.log(res);
+
         setReceived([]);
         setName('');
         setLevel('');
-        setEvalute('');
+        setNote('');
+        setBeginDate(new Date());
         setEndDate(new Date());
-
         setLevel('');
-        setEvalute('');
         setOpen(false);
     };
 
     return (
         <div>
-            {props.miniButton === true ? (
-                <IconButton aria-label="expand row" size="small" onClick={handleClickOpen}>
-                    <AddTaskIcon />
-                </IconButton>
-            ) : (
-                <Button variant="outlined" onClick={handleClickOpen} startIcon={<AddCircleIcon />}>
-                    Thêm công việc
-                </Button>
-            )}
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                {props.miniButton === true ? (
+                    <IconButton aria-label="expand row" size="small" onClick={handleClickOpen}>
+                        <AddTaskIcon />
+                    </IconButton>
+                ) : (
+                    <Button variant="outlined" onClick={handleClickOpen} startIcon={<AddCircleIcon />}>
+                        Thêm công việc
+                    </Button>
+                )}
 
-            <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
-                <AppBar sx={{ position: 'relative' }}>
-                    <Toolbar>
-                        <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
-                            <CloseIcon />
-                        </IconButton>
-                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            Thêm mới công việc
-                        </Typography>
-                        <Button
-                            autoFocus
-                            variant="outlined"
-                            color="inherit"
-                            onClick={handleSave}
-                            endIcon={<SaveIcon />}
-                        >
-                            Lưu
-                        </Button>
-                    </Toolbar>
-                </AppBar>
-                <Box
-                    component="form"
-                    sx={{
-                        '& .MuiTextField-root': { m: 2, width: '90%' },
-                        p: 2,
-                    }}
-                    noValidate
-                    autoComplete="off"
-                >
-                    <Grid container>
-                        <Grid item xs={6}>
-                            <TextField fullWidth label="Tên công việc" onChange={(e) => setName(e.target.value)} />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <SelectAutoWidth
-                                data={levels}
-                                onChange={setLevel}
-                                selected={level}
-                                contentKey="NAME_WORK_LEVELS"
-                                label="Chọn mức độ công việc"
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <SelectAutoWidth
-                                data={evalutes}
-                                onChange={setEvalute}
-                                selected={evalute}
-                                contentKey="NAME_WORK_EVALUTES"
-                                label="Chọn mức độ đánh giá công việc"
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DesktopDatePicker
-                                    label="Ngày hết hạn"
-                                    value={endDate}
-                                    minDate={new Date()}
-                                    onChange={handlePickDate}
-                                    inputFormat="dd/MM/yyyy"
-                                    renderInput={(params) => <TextField {...params} />}
-                                    disableMaskedInput
+                <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+                    <AppBar sx={{ position: 'relative' }}>
+                        <Toolbar>
+                            <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+                                <CloseIcon />
+                            </IconButton>
+                            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                                Thêm mới công việc
+                            </Typography>
+                            <Button
+                                autoFocus
+                                variant="outlined"
+                                color="inherit"
+                                onClick={handleSave}
+                                endIcon={<SaveIcon />}
+                            >
+                                Lưu
+                            </Button>
+                        </Toolbar>
+                    </AppBar>
+                    <Box
+                        component="form"
+                        sx={{
+                            '& .MuiTextField-root': { m: 2, width: '90%' },
+                            p: 2,
+                        }}
+                        noValidate
+                        autoComplete="off"
+                    >
+                        <Grid container>
+                            <Grid item xs={6}>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        value={name}
+                                        label="Tên công việc"
+                                        onChange={(e) => setName(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <SelectAutoWidth
+                                        data={levels}
+                                        onChange={setLevel}
+                                        selected={level}
+                                        contentKey="NAME_WORK_LEVELS"
+                                        label="Chọn loại công việc"
+                                    />
+                                </Grid>
+                                <Grid container direction="row" spacing={1} sx={{ p: 1 }}>
+                                    <Grid item xs={5.7}>
+                                        <DesktopDatePicker
+                                            label="Ngày bắt đầu"
+                                            value={beginDate}
+                                            minDate={new Date()}
+                                            maxDate={new Date('01/01/2099')}
+                                            onChange={handleBeginDate}
+                                            inputFormat="dd/MM/yyyy"
+                                            renderInput={(params) => <TextField {...params} />}
+                                            disableMaskedInput
+                                        />
+                                    </Grid>
+                                    <Grid item xs={5.8}>
+                                        <DesktopDatePicker
+                                            label="Ngày hết hạn"
+                                            value={endDate}
+                                            minDate={beginDate}
+                                            maxDate={
+                                                props.data ? new Date(props.data.END_DATE_AT) : new Date('01/01/2099')
+                                            }
+                                            onChange={handleEndDate}
+                                            inputFormat="dd/MM/yyyy"
+                                            renderInput={(params) => <TextField {...params} />}
+                                            disableMaskedInput
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    fullWidth
+                                    multiline
+                                    value={note}
+                                    maxRows={9.4}
+                                    minRows={9.4}
+                                    label="Nội dung công việc"
+                                    onChange={(e) => setNote(e.target.value)}
                                 />
-                            </LocalizationProvider>
+                            </Grid>
+                            <Grid item xs={12} sx={{ height: '240px', m: 2 }}>
+                                <AddReceiveWork dataTable={received} />
+                            </Grid>
+                            <Grid item xs={12} sx={{ m: '0 2' }}>
+                                <AddReceiveDialog onSubmit={setReceived} endDate={endDate} />
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12} sx={{ height: '318px', m: 2 }}>
-                            <AddReceiveWork dataTable={received} />
-                        </Grid>
-                        <Grid item xs={12} sx={{ m: '0 2' }}>
-                            <AddReceiveDialog onSubmit={setReceived} />
-                        </Grid>
-                    </Grid>
-                </Box>
-            </Dialog>
+                    </Box>
+                </Dialog>
+            </LocalizationProvider>
         </div>
     );
 }

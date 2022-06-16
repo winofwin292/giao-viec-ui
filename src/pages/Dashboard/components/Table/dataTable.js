@@ -16,7 +16,7 @@ import AddWorkForm from '../AddWorkForm';
 
 function EnhancedTable() {
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('ID');
+    const [orderBy, setOrderBy] = React.useState('STT');
     const [selected, setSelected] = React.useState([]);
     const [data, setData] = React.useState([]);
     const [page, setPage] = React.useState(0);
@@ -26,6 +26,12 @@ function EnhancedTable() {
         async function fetchMyAPI() {
             try {
                 let response = await worksApi.getAll();
+                var i = 1;
+                response.forEach((item) => {
+                    item.STT = i;
+                    i++;
+                });
+                // response.forEach((item) => console.log(item));
                 setData(response);
             } catch (error) {
                 console.log(error.message);
@@ -105,7 +111,6 @@ function EnhancedTable() {
                             {stableSort(data, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    row.STT = index + 1;
                                     return (
                                         <CollapseRow
                                             key={row.ID}

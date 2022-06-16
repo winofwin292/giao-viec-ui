@@ -4,53 +4,53 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 //constants
 export const headCells = [
     {
-        id: 'ID',
+        id: 'STT',
         numeric: true,
         disablePadding: true,
-        label: 'ID',
-        minWidth: 50,
+        label: 'STT',
+        minWidth: 40,
     },
     {
         id: 'TEN_CV',
         numeric: false,
         disablePadding: false,
         label: 'Tên công việc',
-        minWidth: 250,
+        minWidth: 160,
     },
     {
         id: 'TEN_NGUOI_TAO',
         numeric: false,
         disablePadding: false,
         label: 'Người tạo',
-        minWidth: 200,
+        minWidth: 160,
     },
     {
         id: 'LOAI_CV',
         numeric: false,
         disablePadding: false,
         label: 'Loại',
-        minWidth: 200,
+        minWidth: 170,
     },
     {
         id: 'TG_TAO',
         numeric: false,
         disablePadding: false,
-        label: 'Ngày tạo',
-        minWidth: 140,
+        label: 'Bắt đầu',
+        minWidth: 120,
     },
     {
         id: 'TG_HET_HAN',
         numeric: false,
         disablePadding: false,
-        label: 'Ngày hết hạn',
-        minWidth: 150,
+        label: 'Hết hạn',
+        minWidth: 120,
     },
     {
         id: 'IS_SEEN',
         numeric: false,
         disablePadding: false,
         label: 'Trạng thái',
-        minWidth: 140,
+        minWidth: 110,
     },
     {
         id: 'TEN_NGUOI_NHAN',
@@ -64,7 +64,7 @@ export const headCells = [
         numeric: false,
         disablePadding: false,
         label: 'Tổng thời gian',
-        minWidth: 160,
+        minWidth: 120,
     },
 ];
 

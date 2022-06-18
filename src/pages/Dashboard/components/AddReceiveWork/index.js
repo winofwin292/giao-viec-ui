@@ -1,46 +1,40 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-
-const columns = [
-    { field: 'ID', headerName: 'ID', width: 100 },
-    { field: 'NAME_USERS', headerName: 'Tên', width: 250 },
-    {
-        field: 'WORK_TYPE_NAME',
-        headerName: 'Loại công việc',
-        width: 180,
-        editable: true,
-        type: 'singleSelect',
-        valueOptions: [
-            {
-                value: 1,
-                label: 'Chính',
-            },
-            {
-                value: 2,
-                label: 'Phối hợp',
-            },
-            {
-                value: 3,
-                label: 'Giám sát',
-            },
-        ],
-    },
-    { field: 'COMMENT_WORK_RECEIVE', headerName: 'Nội dung', width: 470, editable: true },
-    { field: 'BEGIN_DATE_AT', headerName: 'Ngày bắt đầu', width: 170, editable: true, type: 'date' },
-    { field: 'END_DATE_AT', headerName: 'Ngày kết thúc', width: 170, editable: true, type: 'date' },
-];
+import HeaderTable from './HeaderTable';
 
 function AddReceiveWork(props) {
+    const data = props.data.users;
+    const types = props.data.types;
+    const note = props.data.note;
+    const beginDate = props.data.beginDate;
+    const endDate = props.data.endDate;
+    const header = HeaderTable(types);
+
+    data.forEach((element) => {
+        element.WORK_TYPE_NAME = 1;
+        element.COMMENT_WORK_RECEIVE = note;
+        element.BEGIN_DATE_AT = beginDate;
+        element.END_DATE_AT = endDate;
+    });
+
+    const handleSelected = (ids) => {
+        const selectedIDs = new Set(ids);
+        const selectedRowData = data.filter((row) => selectedIDs.has(row.ID));
+        props.onSelected(selectedRowData);
+    };
+
     return (
         <DataGrid
             sx={{ width: '97%' }}
-            rows={props.dataTable}
-            columns={columns}
-            pageSize={3}
-            rowsPerPageOptions={[3]}
+            rows={data}
+            columns={header}
+            pageSize={5}
+            rowsPerPageOptions={[5]}
             getRowId={(row) => row.ID}
             experimentalFeatures={{ newEditingApi: true }}
             checkboxSelection
+            disableSelectionOnClick
+            onSelectionModelChange={(ids) => handleSelected(ids)}
         />
     );
 }

@@ -15,7 +15,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems } from './listItems';
-import Copyright from '~/components/Copyright';
 import EnhancedTable from './components/Table/dataTable';
 
 const drawerWidth = 240;
@@ -134,7 +133,6 @@ function Dashboard() {
                     <Toolbar />
                     <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
                         <EnhancedTable />
-                        <Copyright sx={{ pt: 4 }} />
                     </Container>
                 </Box>
             </Box>

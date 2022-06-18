@@ -20,8 +20,8 @@ import SelectAutoWidth from '../SelectAutoWidth';
 import levelApi from '~/api/Levels/levelApi';
 import worksApi from '~/api/Works/worksApi';
 import AddReceiveWork from '../AddReceiveWork';
-import AddReceiveDialog from '../AddReceiveDialog';
 import userApi from '~/api/Users/useApi';
+import typeApi from '~/api/Types/typeApi';
 import { convert } from '../share';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -42,6 +42,7 @@ function AddWorkForm(props) {
     const [endDate, setEndDate] = React.useState(new Date());
     const [received, setReceived] = React.useState([]);
     const [users, setUsers] = React.useState([]);
+    const [types, setTypes] = React.useState([]);
 
     const handleBeginDate = (newDate) => {
         setBeginDate(newDate);
@@ -56,6 +57,8 @@ function AddWorkForm(props) {
         setLevels(res_level);
         const res_user = await userApi.getAll();
         setUsers(res_user);
+        const res_type = await typeApi.getAll();
+        setTypes(res_type);
     };
 
     const handleClose = () => {
@@ -197,11 +200,14 @@ function AddWorkForm(props) {
                                     onChange={(e) => setNote(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={12} sx={{ height: '240px', m: 2 }}>
-                                <AddReceiveWork dataTable={users} />
+                            <Grid item xs={12} sx={{ height: '340px', m: 2 }}>
+                                <AddReceiveWork
+                                    data={{ users, types, note, beginDate, endDate }}
+                                    onSelected={setReceived}
+                                />
                             </Grid>
                             <Grid item xs={12} sx={{ m: '0 2' }}>
-                                <AddReceiveDialog onSubmit={setReceived} endDate={endDate} />
+                                Save Button here
                             </Grid>
                         </Grid>
                     </Box>

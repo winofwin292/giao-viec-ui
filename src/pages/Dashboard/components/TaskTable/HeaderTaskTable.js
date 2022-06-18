@@ -7,7 +7,7 @@ import { visuallyHidden } from '@mui/utils';
 import Box from '@mui/material/Box';
 import { headCells, StyledTableCell } from '~/pages/Dashboard/components/share';
 
-function EnhancedTableHead(props) {
+function HeaderTaskTable(props) {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
@@ -31,9 +31,10 @@ function EnhancedTableHead(props) {
                     <StyledTableCell
                         key={headCell.id}
                         align={headCell.numeric ? 'right' : 'left'}
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
+                        // padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                         style={{ minWidth: headCell.minWidth }}
+                        sx={{ padding: '5px 10px' }}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
@@ -56,7 +57,7 @@ function EnhancedTableHead(props) {
     );
 }
 
-EnhancedTableHead.propTypes = {
+HeaderTaskTable.propTypes = {
     numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
     onSelectAllClick: PropTypes.func.isRequired,
@@ -65,5 +66,4 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-export default EnhancedTableHead;
-export { headCells };
+export default HeaderTaskTable;

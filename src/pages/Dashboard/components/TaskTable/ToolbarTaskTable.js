@@ -7,7 +7,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
-const EnhancedTableToolbar = (props) => {
+function ToolbarTaskTable(props) {
     const { numSelected } = props;
 
     return (
@@ -45,10 +45,10 @@ const EnhancedTableToolbar = (props) => {
             )}
         </Toolbar>
     );
-};
+}
 
-EnhancedTableToolbar.propTypes = {
+ToolbarTaskTable.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default EnhancedTableToolbar;
+export default ToolbarTaskTable;

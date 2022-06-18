@@ -28,13 +28,14 @@ function AddReceiveWork(props) {
             sx={{ width: '97%' }}
             rows={data}
             columns={header}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
+            pageSize={8}
+            rowsPerPageOptions={[8]}
             getRowId={(row) => row.ID}
             experimentalFeatures={{ newEditingApi: true }}
             checkboxSelection
             disableSelectionOnClick
             onSelectionModelChange={(ids) => handleSelected(ids)}
+            rowHeight={30}
         />
     );
 }

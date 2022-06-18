@@ -15,7 +15,7 @@ export const headCells = [
         numeric: false,
         disablePadding: false,
         label: 'Tên công việc',
-        minWidth: 160,
+        minWidth: 150,
     },
     {
         id: 'TEN_NGUOI_TAO',

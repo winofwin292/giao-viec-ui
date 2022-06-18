@@ -9,22 +9,20 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import TableContainer from '@mui/material/TableContainer';
-import Checkbox from '@mui/material/Checkbox';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import worksApi from '~/api/Works/worksApi';
-import DetailDialog from '../DetailDialog';
-import ChildHeader from './childTable/childHeader';
-import ChildRow from './childTable/childRow';
-import { getComparator, stableSort } from './sortTable';
+import DetailDialog from '~/pages/Dashboard/components/DetailDialog';
+import ChildHeader from '../TaskTableChild/ChildHeader';
+import { getComparator, stableSort } from '../sortTaskTable';
 import { convert } from '~/pages/Dashboard/components/share';
 
-function CollapseRow(props) {
+function ChildRow(props) {
     const data = props.data;
     const [open, setOpen] = React.useState(false);
     const [childData, setChildData] = React.useState([]);
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('ID');
+    const [orderBy, setOrderBy] = React.useState('STT');
     const [selected, setSelected] = React.useState([]);
     const [contextMenu, setContextMenu] = React.useState(null);
 
@@ -47,23 +45,17 @@ function CollapseRow(props) {
     const handleOpen = async (event, id) => {
         event.preventDefault();
         setOpen(!open);
-
         const data_req = {
             WORK_ID: id,
         };
-
         if (open === false) {
-            // console.log('show');
+            console.log('show');
             const res = await worksApi.getChild(data_req);
-            var i = 1;
-            res.forEach((item) => {
-                item.STT = i;
-                i++;
-            });
             // console.log(res);
             setChildData(res);
         } else {
-            // console.log('end show');
+            console.log('end show');
+
             setChildData([]);
         }
     };
@@ -107,16 +99,6 @@ function CollapseRow(props) {
                 // onClick={(event) => handleOpen(event)}
                 onContextMenu={handleContextMenu}
             >
-                <TableCell padding="checkbox">
-                    <Checkbox
-                        color="primary"
-                        checked={props.isItemSelected}
-                        onClick={props.onClick}
-                        inputProps={{
-                            'aria-labelledby': props.labelId,
-                        }}
-                    />
-                </TableCell>
                 <TableCell component="th" id={props.labelId} scope="row" padding="none" align="right">
                     {data.STT}
                 </TableCell>
@@ -153,6 +135,7 @@ function CollapseRow(props) {
                                 />
                                 <TableBody>
                                     {stableSort(childData, getComparator(order, orderBy)).map((row, index) => {
+                                        row.STT = index + 1;
                                         return (
                                             <ChildRow
                                                 key={row.ID}
@@ -187,7 +170,7 @@ function CollapseRow(props) {
     );
 }
 
-CollapseRow.propTypes = {
+ChildRow.propTypes = {
     data: PropTypes.shape({
         ID: PropTypes.number.isRequired,
         NAME_WORKS: PropTypes.string.isRequired,
@@ -198,4 +181,4 @@ CollapseRow.propTypes = {
     }).isRequired,
 };
 
-export default CollapseRow;
+export default ChildRow;

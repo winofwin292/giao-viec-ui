@@ -7,14 +7,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import EnhancedTableHead from './headerTable';
-import { getComparator, stableSort } from './sortTable';
-import EnhancedTableToolbar from './toolbarTable';
-import CollapseRow from './collapseRow';
+import HeaderTaskTable from './HeaderTaskTable';
+import { getComparator, stableSort } from './sortTaskTable';
+import ToolbarTaskTable from './ToolbarTaskTable';
+import RowTaskTable from './RowTaskTable';
 import worksApi from '~/api/Works/worksApi';
 import AddWorkForm from '../AddWorkForm';
 
-function EnhancedTable() {
+function TaskTable() {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('STT');
     const [selected, setSelected] = React.useState([]);
@@ -90,14 +90,22 @@ function EnhancedTable() {
 
     return (
         <Box sx={{ width: '100%' }}>
-            <Paper sx={{ marginBottom: '10px', width: '100%', mb: 2, p: 2 }}>
+            <Paper
+                sx={{
+                    marginBottom: '10px',
+                    width: '100%',
+                    mb: 2,
+                    p: 1,
+                    boxShadow: ' rgb(183 183 183) 0px 1px 10px',
+                }}
+            >
                 <AddWorkForm sx={{ padding: '10px' }} />
             </Paper>
-            <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+            <Paper sx={{ width: '100%', mb: 2, boxShadow: ' rgb(183 183 183) 0px 1px 10px' }}>
+                <ToolbarTaskTable numSelected={selected.length} />
                 <TableContainer sx={{ maxHeight: 400 }}>
                     <Table stickyHeader aria-labelledby="tableTitle" size="small">
-                        <EnhancedTableHead
+                        <HeaderTaskTable
                             numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
@@ -112,7 +120,7 @@ function EnhancedTable() {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
                                     return (
-                                        <CollapseRow
+                                        <RowTaskTable
                                             key={row.ID}
                                             data={row}
                                             isItemSelected={isSelected(row.ID)}
@@ -147,4 +155,4 @@ function EnhancedTable() {
     );
 }
 
-export default EnhancedTable;
+export default TaskTable;

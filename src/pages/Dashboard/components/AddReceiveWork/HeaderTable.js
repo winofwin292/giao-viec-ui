@@ -8,6 +8,12 @@ function HeaderTable(workTypes) {
             width: 180,
             editable: true,
             type: 'singleSelect',
+            valueFormatter: ({ id: rowId, value, field, api }) => {
+                const colDef = api.getColumn(field);
+                const option = colDef.valueOptions.find(({ value: optionValue }) => value === optionValue);
+
+                return option.label;
+            },
         },
         { field: 'COMMENT_WORK_RECEIVE', headerName: 'Nội dung', width: 470, editable: true },
         { field: 'BEGIN_DATE_AT', headerName: 'Ngày bắt đầu', width: 150, editable: true, type: 'date' },

@@ -1,25 +1,26 @@
 import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
+import Fab from '@mui/material/Fab';
+import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import Slide from '@mui/material/Slide';
+import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import AddTaskIcon from '@mui/icons-material/AddTask';
-import Slide from '@mui/material/Slide';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
 import SaveIcon from '@mui/icons-material/Save';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import SelectAutoWidth from '../SelectAutoWidth';
-import levelApi from '~/api/Levels/levelApi';
-import worksApi from '~/api/Works/worksApi';
 import AddReceiveWork from '../AddReceiveWork';
+import levelApi from '~/api/Levels/levelApi';
+// import worksApi from '~/api/Works/worksApi';
 import userApi from '~/api/Users/useApi';
 import typeApi from '~/api/Types/typeApi';
 import { convert } from '../share';
@@ -61,17 +62,28 @@ function AddWorkForm(props) {
         setTypes(res_type);
     };
 
-    const handleClose = () => {
-        setLevels([]);
+    const clearInput = () => {
+        setReceived([]);
+        setName('');
         setLevel('');
         setNote('');
+        setLevels([]);
         setBeginDate(new Date());
         setEndDate(new Date());
+    };
+
+    const handleClose = () => {
+        clearInput();
         setOpen(false);
-        setReceived([]);
     };
 
     const handleSave = async () => {
+        received.forEach((element) => {
+            const newBeginDate = convert(element.BEGIN_DATE_AT.toString());
+            const newEndDate = convert(element.END_DATE_AT.toString());
+            element.BEGIN_DATE_AT = newBeginDate;
+            element.END_DATE_AT = newEndDate;
+        });
         const data = {
             USER_ID: cUserId,
             WORK_LEVEL_ID: level,
@@ -85,18 +97,12 @@ function AddWorkForm(props) {
             WORK_ID: cWorkId,
             WORK_RECEIVES: received,
         };
-        // console.log(data);
-        const res = await worksApi.createWork(data);
-        console.log(res);
+        console.log(data);
+        // const res = await worksApi.createWork(data);
+        // console.log(res);
 
-        setReceived([]);
-        setName('');
-        setLevel('');
-        setNote('');
-        setBeginDate(new Date());
-        setEndDate(new Date());
-        setLevel('');
-        setOpen(false);
+        // clearInput();
+        // setOpen(false);
     };
 
     return (
@@ -115,21 +121,12 @@ function AddWorkForm(props) {
                 <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
                     <AppBar sx={{ position: 'relative' }}>
                         <Toolbar>
-                            <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
-                                <CloseIcon />
-                            </IconButton>
                             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                                 Thêm mới công việc
                             </Typography>
-                            <Button
-                                autoFocus
-                                variant="outlined"
-                                color="inherit"
-                                onClick={handleSave}
-                                endIcon={<SaveIcon />}
-                            >
-                                Lưu
-                            </Button>
+                            <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
+                                <CloseIcon />
+                            </IconButton>
                         </Toolbar>
                     </AppBar>
                     <Box
@@ -149,6 +146,7 @@ function AddWorkForm(props) {
                                         value={name}
                                         label="Tên công việc"
                                         onChange={(e) => setName(e.target.value)}
+                                        size="small"
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -169,7 +167,7 @@ function AddWorkForm(props) {
                                             maxDate={new Date('01/01/2099')}
                                             onChange={handleBeginDate}
                                             inputFormat="dd/MM/yyyy"
-                                            renderInput={(params) => <TextField {...params} />}
+                                            renderInput={(params) => <TextField size="small" {...params} />}
                                             disableMaskedInput
                                         />
                                     </Grid>
@@ -183,7 +181,7 @@ function AddWorkForm(props) {
                                             }
                                             onChange={handleEndDate}
                                             inputFormat="dd/MM/yyyy"
-                                            renderInput={(params) => <TextField {...params} />}
+                                            renderInput={(params) => <TextField size="small" {...params} />}
                                             disableMaskedInput
                                         />
                                     </Grid>
@@ -194,10 +192,11 @@ function AddWorkForm(props) {
                                     fullWidth
                                     multiline
                                     value={note}
-                                    maxRows={9.4}
-                                    minRows={9.4}
+                                    maxRows={7.2}
+                                    minRows={7.2}
                                     label="Nội dung công việc"
                                     onChange={(e) => setNote(e.target.value)}
+                                    size="small"
                                 />
                             </Grid>
                             <Grid item xs={12} sx={{ height: '340px', m: 2 }}>
@@ -207,7 +206,20 @@ function AddWorkForm(props) {
                                 />
                             </Grid>
                             <Grid item xs={12} sx={{ m: '0 2' }}>
-                                Save Button here
+                                <Fab
+                                    sx={{
+                                        position: 'absolute',
+                                        bottom: 16,
+                                        right: 16,
+                                    }}
+                                    aria-label="Lưu"
+                                    color="primary"
+                                    size="medium"
+                                    variant="extended"
+                                    onClick={handleSave}
+                                >
+                                    <SaveIcon sx={{ mr: 1 }} /> Lưu
+                                </Fab>
                             </Grid>
                         </Grid>
                     </Box>

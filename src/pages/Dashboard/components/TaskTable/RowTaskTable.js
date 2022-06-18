@@ -9,20 +9,22 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import TableContainer from '@mui/material/TableContainer';
+import Checkbox from '@mui/material/Checkbox';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import worksApi from '~/api/Works/worksApi';
-import DetailDialog from '~/pages/Dashboard/components/DetailDialog';
-import ChildHeader from '../childTable/childHeader';
-import { getComparator, stableSort } from '../sortTable';
+import DetailDialog from '../DetailDialog';
+import ChildHeader from './TaskTableChild/ChildHeader';
+import ChildRow from './TaskTableChild/ChildRow';
+import { getComparator, stableSort } from './sortTaskTable';
 import { convert } from '~/pages/Dashboard/components/share';
 
-function ChildRow(props) {
+function RowTaskTable(props) {
     const data = props.data;
     const [open, setOpen] = React.useState(false);
     const [childData, setChildData] = React.useState([]);
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('STT');
+    const [orderBy, setOrderBy] = React.useState('ID');
     const [selected, setSelected] = React.useState([]);
     const [contextMenu, setContextMenu] = React.useState(null);
 
@@ -45,17 +47,23 @@ function ChildRow(props) {
     const handleOpen = async (event, id) => {
         event.preventDefault();
         setOpen(!open);
+
         const data_req = {
             WORK_ID: id,
         };
+
         if (open === false) {
-            console.log('show');
+            // console.log('show');
             const res = await worksApi.getChild(data_req);
+            var i = 1;
+            res.forEach((item) => {
+                item.STT = i;
+                i++;
+            });
             // console.log(res);
             setChildData(res);
         } else {
-            console.log('end show');
-
+            // console.log('end show');
             setChildData([]);
         }
     };
@@ -99,25 +107,51 @@ function ChildRow(props) {
                 // onClick={(event) => handleOpen(event)}
                 onContextMenu={handleContextMenu}
             >
-                <TableCell component="th" id={props.labelId} scope="row" padding="none" align="right">
+                <TableCell padding="checkbox">
+                    <Checkbox
+                        color="primary"
+                        checked={props.isItemSelected}
+                        onClick={props.onClick}
+                        inputProps={{
+                            'aria-labelledby': props.labelId,
+                        }}
+                    />
+                </TableCell>
+                <TableCell component="th" id={props.labelId} scope="row" sx={{ padding: '5px 10px' }} align="center">
                     {data.STT}
                 </TableCell>
-                <TableCell align="left">{data.NAME_WORKS}</TableCell>
-                <TableCell align="left">{data.NAME_USERS}</TableCell>
-                <TableCell align="left">{data.NAME_WORK_LEVELS}</TableCell>
-                <TableCell align="left">{convert(data.BEGIN_DATE_AT)}</TableCell>
-                <TableCell align="left">{convert(data.END_DATE_AT)}</TableCell>
-                <TableCell align="left">{data.IS_SEEN === 1 ? 'Đã xem' : 'Chưa xem'}</TableCell>
-                <TableCell align="left">{data.NAME_RECEIVERS === '' ? 'Chưa giao' : data.NAME_RECEIVERS}</TableCell>
-                <TableCell align="left">{data.TOTAL_TIME}</TableCell>
+                <TableCell align="left" sx={{ padding: '5px 10px' }}>
+                    {data.NAME_WORKS}
+                </TableCell>
+                <TableCell align="left" sx={{ padding: '5px 10px' }}>
+                    {data.NAME_USERS}
+                </TableCell>
+                <TableCell align="left" sx={{ padding: '5px 10px' }}>
+                    {data.NAME_WORK_LEVELS}
+                </TableCell>
+                <TableCell align="left" sx={{ padding: '5px 10px' }}>
+                    {convert(data.BEGIN_DATE_AT)}
+                </TableCell>
+                <TableCell align="left" sx={{ padding: '5px 10px' }}>
+                    {convert(data.END_DATE_AT)}
+                </TableCell>
+                <TableCell align="left" sx={{ padding: '5px 10px' }}>
+                    {data.IS_SEEN === 1 ? 'Đã xem' : 'Chưa xem'}
+                </TableCell>
+                <TableCell align="left" sx={{ padding: '5px 10px' }}>
+                    {data.NAME_RECEIVERS === '' ? 'Chưa giao' : data.NAME_RECEIVERS}
+                </TableCell>
+                <TableCell align="left" sx={{ padding: '5px 10px' }}>
+                    {data.TOTAL_TIME}
+                </TableCell>
                 {/* {childData.length !== 0 && ( */}
-                <TableCell>
+                <TableCell sx={{ padding: '5px 10px' }}>
                     <IconButton aria-label="expand row" size="small" onClick={(event) => handleOpen(event, data.ID)}>
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
                 {/* )} */}
-                <TableCell>
+                <TableCell sx={{ padding: '5px 10px' }}>
                     <DetailDialog id={data.ID} />
                 </TableCell>
             </TableRow>
@@ -135,7 +169,6 @@ function ChildRow(props) {
                                 />
                                 <TableBody>
                                     {stableSort(childData, getComparator(order, orderBy)).map((row, index) => {
-                                        row.STT = index + 1;
                                         return (
                                             <ChildRow
                                                 key={row.ID}
@@ -170,7 +203,7 @@ function ChildRow(props) {
     );
 }
 
-ChildRow.propTypes = {
+RowTaskTable.propTypes = {
     data: PropTypes.shape({
         ID: PropTypes.number.isRequired,
         NAME_WORKS: PropTypes.string.isRequired,
@@ -181,4 +214,4 @@ ChildRow.propTypes = {
     }).isRequired,
 };
 
-export default ChildRow;
+export default RowTaskTable;

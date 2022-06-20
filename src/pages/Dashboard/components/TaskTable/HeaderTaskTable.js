@@ -12,11 +12,14 @@ function HeaderTaskTable(props) {
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
+    const colorCode =
+        ['#03a9f4', '#0288d1', '#01579b', '#4caf50', '#2e7d32', '#1b5e20'][Math.floor(Math.random() * 5)] +
+        '!important';
 
     return (
         <TableHead>
             <TableRow>
-                <StyledTableCell padding="checkbox">
+                <StyledTableCell padding="checkbox" sx={{ backgroundColor: colorCode }}>
                     <Checkbox
                         color="primary"
                         indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -34,7 +37,7 @@ function HeaderTaskTable(props) {
                         // padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                         style={{ minWidth: headCell.minWidth }}
-                        sx={{ padding: '5px 10px' }}
+                        sx={{ padding: '5px 10px', backgroundColor: colorCode }}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
@@ -50,8 +53,14 @@ function HeaderTaskTable(props) {
                         </TableSortLabel>
                     </StyledTableCell>
                 ))}
-                <StyledTableCell style={{ minWidth: 20 }} padding="none"></StyledTableCell>
-                <StyledTableCell style={{ minWidth: 20 }} padding="none"></StyledTableCell>
+                <StyledTableCell
+                    style={{ minWidth: 20 }}
+                    sx={{ padding: '5px 10px', backgroundColor: colorCode }}
+                ></StyledTableCell>
+                <StyledTableCell
+                    style={{ minWidth: 20 }}
+                    sx={{ padding: '5px 10px', backgroundColor: colorCode }}
+                ></StyledTableCell>
             </TableRow>
         </TableHead>
     );

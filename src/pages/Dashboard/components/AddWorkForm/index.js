@@ -21,10 +21,10 @@ import { useSelector } from 'react-redux';
 import SelectAutoWidth from '../SelectAutoWidth';
 import AddReceiveWork from '../AddReceiveWork';
 import levelApi from '~/api/Levels/levelApi';
-// import worksApi from '~/api/Works/worksApi';
+import worksApi from '~/api/Works/worksApi';
 import userApi from '~/api/Users/useApi';
 import typeApi from '~/api/Types/typeApi';
-import { convert } from '../share';
+// import { convert } from '../share';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -47,6 +47,22 @@ function AddWorkForm(props) {
     const [users, setUsers] = React.useState([]);
     const [types, setTypes] = React.useState([]);
 
+    React.useEffect(() => {
+        async function fetchMyAPI() {
+            try {
+                const res_type = await typeApi.getAll();
+                setTypes(res_type);
+                const res_level = await levelApi.getAll();
+                setLevels(res_level);
+                const res_user = await userApi.getAll();
+                setUsers(res_user);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+        fetchMyAPI();
+    }, []);
+
     const handleBeginDate = (newDate) => {
         setBeginDate(newDate);
     };
@@ -56,12 +72,6 @@ function AddWorkForm(props) {
 
     const handleClickOpen = async () => {
         setOpen(true);
-        const res_level = await levelApi.getAll();
-        setLevels(res_level);
-        const res_user = await userApi.getAll();
-        setUsers(res_user);
-        const res_type = await typeApi.getAll();
-        setTypes(res_type);
     };
 
     const clearInput = () => {
@@ -80,21 +90,15 @@ function AddWorkForm(props) {
     };
 
     const handleSave = async () => {
-        received.forEach((element) => {
-            const newBeginDate = convert(element.BEGIN_DATE_AT.toString());
-            const newEndDate = convert(element.END_DATE_AT.toString());
-            element.BEGIN_DATE_AT = newBeginDate;
-            element.END_DATE_AT = newEndDate;
-        });
         const data = {
             USER_ID: cUserId,
             WORK_LEVEL_ID: level,
             NAME_WORKS: name,
             NOTE: note,
-            BEGIN_DATE_AT: convert(beginDate.toString()),
-            END_DATE_AT: convert(endDate.toString()),
-            CREATED_AT: convert(new Date().toString()),
-            UPDATED_AT: convert(new Date().toString()),
+            BEGIN_DATE_AT: beginDate,
+            END_DATE_AT: endDate,
+            CREATED_AT: new Date(),
+            UPDATED_AT: new Date(),
             WORK_RECEIVE_ID: cWorkReceiveId,
             WORK_ID: cWorkId,
             WORK_RECEIVES: received,

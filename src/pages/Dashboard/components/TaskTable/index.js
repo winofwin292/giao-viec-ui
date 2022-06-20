@@ -62,7 +62,7 @@ function TaskTable() {
                 setData(defaultData.current);
                 break;
         }
-    }, [filterState]);
+    }, [filterState, nameFilter]);
 
     const handleSelect = (event) => {
         setFilterState(event.target.value);

@@ -99,25 +99,41 @@ function ChildRow(props) {
                 // onClick={(event) => handleOpen(event)}
                 onContextMenu={handleContextMenu}
             >
-                <TableCell component="th" id={props.labelId} scope="row" padding="none" align="right">
+                <TableCell component="th" id={props.labelId} scope="row" sx={{ padding: '5px 10px' }} align="right">
                     {data.STT}
                 </TableCell>
-                <TableCell align="left">{data.NAME_WORKS}</TableCell>
-                <TableCell align="left">{data.NAME_USERS}</TableCell>
-                <TableCell align="left">{data.NAME_WORK_LEVELS}</TableCell>
-                <TableCell align="left">{convert(data.BEGIN_DATE_AT)}</TableCell>
-                <TableCell align="left">{convert(data.END_DATE_AT)}</TableCell>
-                <TableCell align="left">{data.IS_SEEN === 1 ? 'Đã xem' : 'Chưa xem'}</TableCell>
-                <TableCell align="left">{data.NAME_RECEIVERS === '' ? 'Chưa giao' : data.NAME_RECEIVERS}</TableCell>
-                <TableCell align="left">{data.TOTAL_TIME}</TableCell>
+                <TableCell align="left" sx={{ padding: '5px 10px' }}>
+                    {data.NAME_WORKS}
+                </TableCell>
+                <TableCell align="left" sx={{ padding: '5px 10px' }}>
+                    {data.NAME_USERS}
+                </TableCell>
+                <TableCell align="left" sx={{ padding: '5px 10px' }}>
+                    {data.NAME_WORK_LEVELS}
+                </TableCell>
+                <TableCell align="left" sx={{ padding: '5px 10px' }}>
+                    {convert(data.BEGIN_DATE_AT)}
+                </TableCell>
+                <TableCell align="left" sx={{ padding: '5px 10px' }}>
+                    {convert(data.END_DATE_AT)}
+                </TableCell>
+                <TableCell align="left" sx={{ padding: '5px 10px' }}>
+                    {data.IS_SEEN === 1 ? 'Đã xem' : 'Chưa xem'}
+                </TableCell>
+                <TableCell align="left" sx={{ padding: '5px 10px' }}>
+                    {data.NAME_RECEIVERS === '' ? 'Chưa giao' : data.NAME_RECEIVERS}
+                </TableCell>
+                <TableCell align="left" sx={{ padding: '5px 10px' }}>
+                    {data.TOTAL_TIME}
+                </TableCell>
                 {/* {childData.length !== 0 && ( */}
-                <TableCell>
+                <TableCell sx={{ padding: '5px 10px' }}>
                     <IconButton aria-label="expand row" size="small" onClick={(event) => handleOpen(event, data.ID)}>
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
                 {/* )} */}
-                <TableCell>
+                <TableCell sx={{ padding: '5px 10px' }}>
                     <DetailDialog id={data.ID} />
                 </TableCell>
             </TableRow>

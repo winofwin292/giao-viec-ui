@@ -8,7 +8,7 @@ function HeaderTable(workTypes) {
             width: 180,
             editable: true,
             type: 'singleSelect',
-            valueFormatter: ({ id: rowId, value, field, api }) => {
+            valueFormatter: ({ id, value, field, api }) => {
                 const colDef = api.getColumn(field);
                 const option = colDef.valueOptions.find(({ value: optionValue }) => value === optionValue);
 

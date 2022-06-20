@@ -13,11 +13,14 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useDispatch } from 'react-redux';
+import { login } from './userSlice';
 import userApi from '~/api/Users/useApi';
 
 const theme = createTheme();
 
 function Login({ setToken }) {
+    const dispatch = useDispatch();
     const [username, setUserName] = useState();
     const [password, setPassword] = useState();
 
@@ -27,9 +30,12 @@ function Login({ setToken }) {
             EMAIL: username,
             PASSWORD: password,
         };
-        const token = await userApi.login(data);
-        setToken(token.ID);
-        // setToken(1);
+        try {
+            const actions = login(data);
+            await dispatch(actions);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (

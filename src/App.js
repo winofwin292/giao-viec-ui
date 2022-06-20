@@ -1,15 +1,17 @@
-import { useState } from 'react';
 import { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { publicRoutes } from '~/routes';
 import { DefaultLayout } from '~/components/Layouts';
 import Login from '~/pages/Login';
 
 function App() {
-    const [token, setToken] = useState(1);
+    const loginInUser = useSelector((state) => state.user.current);
+    const isLoggedIn = !!loginInUser.id;
+    console.log(loginInUser);
 
-    if (!token) {
-        return <Login setToken={setToken} />;
+    if (!isLoggedIn) {
+        return <Login />;
     }
 
     return (

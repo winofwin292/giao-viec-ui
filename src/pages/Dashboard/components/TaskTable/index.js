@@ -7,6 +7,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import { useSelector } from 'react-redux';
 import HeaderTaskTable from './HeaderTaskTable';
 import { getComparator, stableSort } from './sortTaskTable';
 import ToolbarTaskTable from './ToolbarTaskTable';
@@ -21,6 +26,9 @@ function TaskTable() {
     const [data, setData] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [filterState, setFilterState] = React.useState('all');
+    const defaultData = React.useRef([]);
+    const nameFilter = useSelector((state) => state.user.current.user.NAME_USERS);
 
     React.useEffect(() => {
         async function fetchMyAPI() {
@@ -31,7 +39,7 @@ function TaskTable() {
                     item.STT = i;
                     i++;
                 });
-                // response.forEach((item) => console.log(item));
+                defaultData.current = response.map((element) => element);
                 setData(response);
             } catch (error) {
                 console.log(error.message);
@@ -39,6 +47,26 @@ function TaskTable() {
         }
         fetchMyAPI();
     }, []);
+
+    React.useEffect(() => {
+        switch (filterState) {
+            case 'created':
+                const filtered = defaultData.current.filter((element) => element.NAME_USERS === nameFilter);
+                setData(filtered);
+                break;
+            case 'received':
+                const filtered1 = defaultData.current.filter((element) => element.NAME_RECEIVERS.includes(nameFilter));
+                setData(filtered1);
+                break;
+            default:
+                setData(defaultData.current);
+                break;
+        }
+    }, [filterState]);
+
+    const handleSelect = (event) => {
+        setFilterState(event.target.value);
+    };
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -48,8 +76,8 @@ function TaskTable() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = data.map((n) => n.ID);
-            setSelected(newSelecteds);
+            const newSelected = data.map((n) => n.ID);
+            setSelected(newSelected);
             //làm gì đó khi chọn tất cả
             return;
         }
@@ -97,9 +125,27 @@ function TaskTable() {
                     mb: 2,
                     p: 1,
                     boxShadow: ' rgb(183 183 183) 0px 1px 10px',
+                    display: 'flex',
                 }}
             >
                 <AddWorkForm sx={{ padding: '10px' }} />
+                <FormControl sx={{ minWidth: 150, ml: '5px', height: '36.5px' }} size="small">
+                    <InputLabel id="demo-select-small">Hiển thị</InputLabel>
+                    <Select
+                        labelId="demo-select-small"
+                        id="demo-select-small"
+                        value={filterState}
+                        label="Hiển thị"
+                        size="small"
+                        sx={{ height: '36.5px' }}
+                        autoWidth
+                        onChange={handleSelect}
+                    >
+                        <MenuItem value="all">Tất cả</MenuItem>
+                        <MenuItem value="created">Đã tạo</MenuItem>
+                        <MenuItem value="received">Đã nhận</MenuItem>
+                    </Select>
+                </FormControl>
             </Paper>
             <Paper sx={{ width: '100%', mb: 2, boxShadow: ' rgb(183 183 183) 0px 1px 10px' }}>
                 <ToolbarTaskTable numSelected={selected.length} />

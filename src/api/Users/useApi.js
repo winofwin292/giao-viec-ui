@@ -1,4 +1,5 @@
 import axiosClient from '../axiosClient';
+import StorageKeys from '~/constants/storage-keys';
 
 const userApi = {
     register(data) {
@@ -12,6 +13,10 @@ const userApi = {
     getAll() {
         const url = '/users';
         return axiosClient.get(url);
+    },
+    async getUser(data) {
+        const url = `users/id`;
+        return await axiosClient.post(url, data);
     },
 };
 

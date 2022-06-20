@@ -17,6 +17,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { useSelector } from 'react-redux';
 import SelectAutoWidth from '../SelectAutoWidth';
 import AddReceiveWork from '../AddReceiveWork';
 import levelApi from '~/api/Levels/levelApi';
@@ -30,7 +31,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function AddWorkForm(props) {
-    const cUserId = props.data?.USER_ID ? props.data?.USER_ID : 1;
+    const userId = useSelector((state) => state.user.current.id);
+    const cUserId = props.data?.USER_ID ? props.data?.USER_ID : userId;
     const cWorkReceiveId = props.data?.WORK_RECEIVE_ID ? props.data?.WORK_RECEIVE_ID : null;
     const cWorkId = props.data?.WORK_ID ? props.data?.WORK_ID : null;
 

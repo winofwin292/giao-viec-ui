@@ -17,6 +17,7 @@ import DetailDialog from '../DetailDialog';
 import ChildHeader from './TaskTableChild/ChildHeader';
 import ChildRow from './TaskTableChild/ChildRow';
 import { getComparator, stableSort } from './sortTaskTable';
+import ChangeStatus from '../ChangeStatus';
 import { convert } from '~/pages/Dashboard/components/share';
 
 function RowTaskTable(props) {
@@ -53,17 +54,14 @@ function RowTaskTable(props) {
         };
 
         if (open === false) {
-            // console.log('show');
             const res = await worksApi.getChild(data_req);
             var i = 1;
             res.forEach((item) => {
                 item.STT = i;
                 i++;
             });
-            // console.log(res);
             setChildData(res);
         } else {
-            // console.log('end show');
             setChildData([]);
         }
     };
@@ -136,7 +134,7 @@ function RowTaskTable(props) {
                     {convert(data.END_DATE_AT)}
                 </TableCell>
                 <TableCell align="left" sx={{ padding: '5px 10px' }}>
-                    {data.IS_SEEN === 1 ? 'Đã xem' : 'Chưa xem'}
+                    {data.STATUS}
                 </TableCell>
                 <TableCell align="left" sx={{ padding: '5px 10px' }}>
                     {data.NAME_RECEIVERS === '' ? 'Chưa giao' : data.NAME_RECEIVERS}
@@ -144,13 +142,22 @@ function RowTaskTable(props) {
                 <TableCell align="left" sx={{ padding: '5px 10px' }}>
                     {data.TOTAL_TIME}
                 </TableCell>
-                {/* {childData.length !== 0 && ( */}
+                <TableCell sx={{ padding: '5px 10px' }}>
+                    <ChangeStatus
+                        miniButton={true}
+                        data={{
+                            ID: data.ID,
+                            STATUS: data.STATUS,
+                            USER_ID: data.USER_ID,
+                        }}
+                        table="work"
+                    />
+                </TableCell>
                 <TableCell sx={{ padding: '5px 10px' }}>
                     <IconButton aria-label="expand row" size="small" onClick={(event) => handleOpen(event, data.ID)}>
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
-                {/* )} */}
                 <TableCell sx={{ padding: '5px 10px' }}>
                     <DetailDialog id={data.ID} />
                 </TableCell>

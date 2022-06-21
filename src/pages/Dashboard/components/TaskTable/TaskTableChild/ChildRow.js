@@ -14,6 +14,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import worksApi from '~/api/Works/worksApi';
 import DetailDialog from '~/pages/Dashboard/components/DetailDialog';
 import ChildHeader from '../TaskTableChild/ChildHeader';
+import ChangeStatus from '../../ChangeStatus';
 import { getComparator, stableSort } from '../sortTaskTable';
 import { convert } from '~/pages/Dashboard/components/share';
 
@@ -118,7 +119,7 @@ function ChildRow(props) {
                     {convert(data.END_DATE_AT)}
                 </TableCell>
                 <TableCell align="left" sx={{ padding: '5px 10px' }}>
-                    {data.IS_SEEN === 1 ? 'Đã xem' : 'Chưa xem'}
+                    {data.STATUS}
                 </TableCell>
                 <TableCell align="left" sx={{ padding: '5px 10px' }}>
                     {data.NAME_RECEIVERS === '' ? 'Chưa giao' : data.NAME_RECEIVERS}
@@ -126,13 +127,21 @@ function ChildRow(props) {
                 <TableCell align="left" sx={{ padding: '5px 10px' }}>
                     {data.TOTAL_TIME}
                 </TableCell>
-                {/* {childData.length !== 0 && ( */}
+                <TableCell sx={{ padding: '5px 10px' }}>
+                    <ChangeStatus
+                        miniButton={true}
+                        data={{
+                            ID: data.ID,
+                            STATUS: data.STATUS,
+                        }}
+                        table="work"
+                    />
+                </TableCell>
                 <TableCell sx={{ padding: '5px 10px' }}>
                     <IconButton aria-label="expand row" size="small" onClick={(event) => handleOpen(event, data.ID)}>
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
-                {/* )} */}
                 <TableCell sx={{ padding: '5px 10px' }}>
                     <DetailDialog id={data.ID} />
                 </TableCell>

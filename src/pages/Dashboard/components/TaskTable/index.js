@@ -11,6 +11,10 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { useSelector } from 'react-redux';
 import HeaderTaskTable from './HeaderTaskTable';
 import { getComparator, stableSort } from './sortTaskTable';
@@ -27,6 +31,8 @@ function TaskTable() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [filterState, setFilterState] = React.useState('all');
+    const [fromDate, setFromDate] = React.useState(new Date());
+    const [toDate, setToDate] = React.useState(new Date());
     const defaultData = React.useRef([]);
     const nameFilter = useSelector((state) => state.user.current.user.NAME_USERS);
 
@@ -51,18 +57,38 @@ function TaskTable() {
     React.useEffect(() => {
         switch (filterState) {
             case 'created':
-                const filtered = defaultData.current.filter((element) => element.NAME_USERS === nameFilter);
+                const filtered = defaultData.current.filter(
+                    (element) =>
+                        element.NAME_USERS === nameFilter &&
+                        new Date(element.BEGIN_DATE_AT) >= fromDate &&
+                        new Date(element.END_DATE_AT) <= toDate,
+                );
                 setData(filtered);
                 break;
             case 'received':
-                const filtered1 = defaultData.current.filter((element) => element.NAME_RECEIVERS.includes(nameFilter));
+                const filtered1 = defaultData.current.filter(
+                    (element) =>
+                        element.NAME_RECEIVERS.includes(nameFilter) &&
+                        new Date(element.BEGIN_DATE_AT) >= fromDate &&
+                        new Date(element.END_DATE_AT) <= toDate,
+                );
                 setData(filtered1);
                 break;
             default:
-                setData(defaultData.current);
+                const filtered2 = defaultData.current.filter(
+                    (element) => new Date(element.BEGIN_DATE_AT) >= fromDate && new Date(element.END_DATE_AT) <= toDate,
+                );
+                setData(filtered2);
                 break;
         }
-    }, [filterState, nameFilter]);
+    }, [filterState, fromDate, nameFilter, toDate]);
+
+    const handleFromDate = (newDate) => {
+        setFromDate(newDate);
+    };
+    const handleToDate = (newDate) => {
+        setToDate(newDate);
+    };
 
     const handleSelect = (event) => {
         setFilterState(event.target.value);
@@ -136,8 +162,6 @@ function TaskTable() {
                         id="demo-select-small"
                         value={filterState}
                         label="Hiển thị"
-                        size="small"
-                        sx={{ height: '36.5px' }}
                         autoWidth
                         onChange={handleSelect}
                     >
@@ -146,6 +170,32 @@ function TaskTable() {
                         <MenuItem value="received">Đã nhận</MenuItem>
                     </Select>
                 </FormControl>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <FormControl sx={{ minWidth: 150, ml: '5px', height: '36.5px' }} size="small">
+                        <DesktopDatePicker
+                            label="Từ ngày"
+                            value={fromDate}
+                            // minDate={beginDate}
+                            maxDate={toDate}
+                            onChange={handleFromDate}
+                            inputFormat="dd/MM/yyyy"
+                            renderInput={(params) => <TextField size="small" {...params} />}
+                            disableMaskedInput
+                        />
+                    </FormControl>
+                    <FormControl sx={{ minWidth: 150, ml: '5px', height: '36.5px' }} size="small">
+                        <DesktopDatePicker
+                            label="Đến ngày"
+                            value={toDate}
+                            minDate={fromDate}
+                            // maxDate={toDate}
+                            onChange={handleToDate}
+                            inputFormat="dd/MM/yyyy"
+                            renderInput={(params) => <TextField size="small" {...params} />}
+                            disableMaskedInput
+                        />
+                    </FormControl>
+                </LocalizationProvider>
             </Paper>
             <Paper sx={{ width: '100%', mb: 2, boxShadow: ' rgb(183 183 183) 0px 1px 10px' }}>
                 <ToolbarTaskTable numSelected={selected.length} />

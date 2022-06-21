@@ -17,6 +17,10 @@ const worksApi = {
         const url = '/works/create';
         return axiosClient.post(url, data);
     },
+    updateStatus(data) {
+        const url = '/works/update_work_status';
+        return axiosClient.post(url, data);
+    },
 };
 
 export default worksApi;

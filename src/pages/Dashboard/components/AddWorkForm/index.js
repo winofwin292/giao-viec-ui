@@ -21,7 +21,7 @@ import { useSelector } from 'react-redux';
 import SelectAutoWidth from '../SelectAutoWidth';
 import AddReceiveWork from '../AddReceiveWork';
 import levelApi from '~/api/Levels/levelApi';
-import worksApi from '~/api/Works/worksApi';
+// import worksApi from '~/api/Works/worksApi';
 import userApi from '~/api/Users/useApi';
 import typeApi from '~/api/Types/typeApi';
 // import { convert } from '../share';
@@ -119,7 +119,12 @@ function AddWorkForm(props) {
                         <AddTaskIcon />
                     </IconButton>
                 ) : (
-                    <Button variant="outlined" onClick={handleClickOpen} startIcon={<AddCircleIcon />}>
+                    <Button
+                        variant="outlined"
+                        sx={{ height: '40px' }}
+                        onClick={handleClickOpen}
+                        startIcon={<AddCircleIcon />}
+                    >
                         Thêm công việc
                     </Button>
                 )}

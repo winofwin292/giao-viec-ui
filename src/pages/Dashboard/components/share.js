@@ -46,7 +46,7 @@ export const headCells = [
         minWidth: 120,
     },
     {
-        id: 'IS_SEEN',
+        id: 'STATUS',
         numeric: false,
         disablePadding: false,
         label: 'Trạng thái',

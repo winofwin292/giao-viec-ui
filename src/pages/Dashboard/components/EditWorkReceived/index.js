@@ -114,7 +114,7 @@ function EditWorkReceived(props) {
                 open={open}
             >
                 <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-                    Thêm người nhận việc
+                    Chỉnh sửa công việc
                 </BootstrapDialogTitle>
                 <Box
                     component="form"
@@ -140,6 +140,7 @@ function EditWorkReceived(props) {
                                 fullWidth
                                 label="Nội dung công việc"
                                 value={comment}
+                                size="small"
                                 onChange={(e) => setComment(e.target.value)}
                             />
                         </Grid>
@@ -151,7 +152,7 @@ function EditWorkReceived(props) {
                                     minDate={new Date(oldData.BEGIN_DATE_AT)}
                                     onChange={handlePickBeginDate}
                                     inputFormat="dd/MM/yyyy"
-                                    renderInput={(params) => <TextField {...params} />}
+                                    renderInput={(params) => <TextField size="small" {...params} />}
                                     disableMaskedInput
                                 />
                             </LocalizationProvider>
@@ -164,7 +165,7 @@ function EditWorkReceived(props) {
                                     minDate={beginDate}
                                     onChange={handlePickEndDate}
                                     inputFormat="dd/MM/yyyy"
-                                    renderInput={(params) => <TextField {...params} />}
+                                    renderInput={(params) => <TextField size="small" {...params} />}
                                     disableMaskedInput
                                 />
                             </LocalizationProvider>

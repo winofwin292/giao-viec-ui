@@ -8,7 +8,7 @@ import Login from '~/pages/Login';
 function App() {
     const loginInUser = useSelector((state) => state.user.current);
     const isLoggedIn = !!loginInUser.id;
-    console.log(loginInUser);
+    // console.log(loginInUser);
 
     if (!isLoggedIn) {
         return <Login />;

@@ -54,13 +54,13 @@ function HeaderTaskTable(props) {
                     </StyledTableCell>
                 ))}
                 <StyledTableCell
+                    colSpan={3}
+                    align="center"
                     style={{ minWidth: 20 }}
                     sx={{ padding: '5px 10px', backgroundColor: colorCode }}
-                ></StyledTableCell>
-                <StyledTableCell
-                    style={{ minWidth: 20 }}
-                    sx={{ padding: '5px 10px', backgroundColor: colorCode }}
-                ></StyledTableCell>
+                >
+                    Công cụ
+                </StyledTableCell>
             </TableRow>
         </TableHead>
     );

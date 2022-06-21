@@ -15,6 +15,7 @@ import TableRow from '@mui/material/TableRow';
 import worksApi from '~/api/Works/worksApi';
 import EditWorkReceived from '../EditWorkReceived';
 import AddWorkForm from '../AddWorkForm';
+import ChangeStatus from '../ChangeStatus';
 import { convert } from '~/pages/Dashboard/components/share';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -59,18 +60,34 @@ function DetailDialog(props) {
     const [open, setOpen] = React.useState(false);
     const [childData, setChildData] = React.useState([]);
 
+    React.useEffect(() => {
+        async function fetchMyAPI() {
+            try {
+                const data_req = {
+                    ID: props.id,
+                };
+                const res = await worksApi.getById(data_req);
+                // console.log(res);
+                setChildData(res);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+        if (open) {
+            fetchMyAPI();
+            // console.log('open');
+        } else {
+            // console.log('close');
+            setChildData([]);
+        }
+    }, [open, props.id]);
+
     const handleClickOpen = async () => {
-        const data_req = {
-            ID: props.id,
-        };
         setOpen(true);
-        const res = await worksApi.getById(data_req);
-        // console.log(res);
-        setChildData(res);
     };
     const handleClose = () => {
         setOpen(false);
-        setChildData([]);
+        // setChildData([]);
     };
 
     return (
@@ -91,7 +108,6 @@ function DetailDialog(props) {
                 <Box sx={{ margin: 1, marginBottom: 4 }}>
                     {/* Table child */}
                     <Table size="small" aria-label="purchases">
-                        {/* <EnhancedTableHead /> */}
                         <TableHead>
                             <TableRow>
                                 <TableCell>STT</TableCell>
@@ -101,6 +117,10 @@ function DetailDialog(props) {
                                 <TableCell align="right">Ngày bắt đầu</TableCell>
                                 <TableCell align="right">Ngày kết thúc</TableCell>
                                 <TableCell align="right">Tổng thời gian</TableCell>
+                                <TableCell align="right">Trạng thái</TableCell>
+                                <TableCell align="center" colSpan={3}>
+                                    Công cụ
+                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -115,6 +135,18 @@ function DetailDialog(props) {
                                     <TableCell align="right">{convert(childRow.BEGIN_DATE_AT)}</TableCell>
                                     <TableCell align="right">{convert(childRow.END_DATE_AT)}</TableCell>
                                     <TableCell align="right">{childRow.TOTAL_TIME}</TableCell>
+                                    <TableCell align="right">{childRow.STATUS}</TableCell>
+                                    <TableCell>
+                                        <ChangeStatus
+                                            miniButton={true}
+                                            data={{
+                                                ID: childRow.ID,
+                                                STATUS: childRow.STATUS,
+                                                USER_ID: childRow.USER_ID,
+                                            }}
+                                            table="receive"
+                                        />
+                                    </TableCell>
                                     <TableCell align="right">
                                         <EditWorkReceived
                                             data={{

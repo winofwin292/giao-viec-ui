@@ -17,7 +17,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import userApi from '~/api/Users/useApi';
 import workReceivesApi from '~/api/WorkReceives/workReceivesApi';
-import { convert } from '../share';
+import { SUCCESS, ERROR } from '~/components/CustomAlert/constants';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -69,7 +69,7 @@ function EditWorkReceived(props) {
     const handleClickOpen = async () => {
         setOpen(true);
         const res_user = await userApi.getAll();
-        setUsers(res_user);
+        setUsers(res_user.data);
         setUserID(oldData.USER_ID);
     };
     const handleClose = () => {
@@ -91,14 +91,27 @@ function EditWorkReceived(props) {
             ID: oldData.ID,
             USER_ID: userID,
             COMMENT_WORK_RECEIVE: comment,
-            BEGIN_DATE_AT: convert(beginDate.toString()),
-            END_DATE_AT: convert(endDate.toString()),
+            BEGIN_DATE_AT: beginDate,
+            END_DATE_AT: endDate,
         };
-        console.log(newObj);
 
         const res = await workReceivesApi.update(newObj);
-        console.log(res);
+        if (res.status === 200) {
+            props.setNotify({
+                open: true,
+                type: SUCCESS,
+                msg: 'Chỉnh sửa thành thành công',
+            });
+        } else {
+            props.setNotify({
+                open: true,
+                type: ERROR,
+                msg: 'Lỗi: lỗi khi chỉnh sửa dữ liệu',
+            });
+        }
         handleClose();
+        //Làm mới dữ liệu
+        props.setRefresh(!props.refresh);
     };
 
     return (

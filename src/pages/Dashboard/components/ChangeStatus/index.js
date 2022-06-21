@@ -11,9 +11,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+
 import { useSelector } from 'react-redux';
 import workReceivesApi from '~/api/WorkReceives/workReceivesApi';
 import worksApi from '~/api/Works/worksApi';
+import { SUCCESS, ERROR } from '~/components/CustomAlert/constants';
 
 const statusWork = [
     {
@@ -31,7 +33,6 @@ function ChangeStatus(props) {
     const [open, setOpen] = React.useState(false);
     const [status, setStatus] = React.useState(objStatus.value);
     const loginInUser = useSelector((state) => state.user.current);
-    // console.log(loginInUser);
 
     const handleChange = (event) => {
         setStatus(event.target.value);
@@ -39,6 +40,8 @@ function ChangeStatus(props) {
 
     const handleClickOpen = () => {
         setOpen(true);
+        const objStatus = statusWork.find((element) => element.label === props.data.STATUS);
+        setStatus(objStatus.value);
     };
 
     const handleClose = () => {
@@ -46,17 +49,33 @@ function ChangeStatus(props) {
     };
 
     const handleSave = async () => {
-        const dataReq = {
-            ID: props.data.ID,
-            STATUS: status,
-        };
         let res = null;
-        if (props.table === 'receive') res = await workReceivesApi.updateStatus(dataReq);
-        else if (props.table === 'work') res = await worksApi.updateStatus(dataReq);
+        try {
+            const dataReq = {
+                ID: props.data.ID,
+                STATUS: status,
+            };
+            if (props.table === 'receive') res = await workReceivesApi.updateStatus(dataReq);
+            else if (props.table === 'work') res = await worksApi.updateStatus(dataReq);
+        } catch (error) {
+            console.log(error.message);
+        }
 
-        //Kiểm tra mã lỗi, nếu lỗi 400 -. công việc được giao chưa hoàn thành
-        console.log(res);
-
+        if (res.status === 200) {
+            props.setNotify({
+                open: true,
+                type: SUCCESS,
+                msg: 'Chuyển trạng thái thành công',
+            });
+        } else {
+            props.setNotify({
+                open: true,
+                type: ERROR,
+                msg: 'Lỗi: không chuyển được trạng thái',
+            });
+        }
+        //Làm mới dữ liệu
+        props.setRefresh(!props.refresh);
         setOpen(false);
     };
     return (

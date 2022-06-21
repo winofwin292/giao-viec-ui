@@ -53,7 +53,7 @@ function ChildRow(props) {
             console.log('show');
             const res = await worksApi.getChild(data_req);
             // console.log(res);
-            setChildData(res);
+            setChildData(res.data);
         } else {
             console.log('end show');
 
@@ -86,113 +86,119 @@ function ChildRow(props) {
     };
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
-
-    return (
-        <React.Fragment>
-            <TableRow
-                hover
-                role="checkbox"
-                aria-checked={props.isItemSelected}
-                tabIndex={-1}
-                key={data.ID}
-                selected={props.isItemSelected}
-                sx={{ '& > *': { borderBottom: 'unset' } }}
-                // onClick={(event) => handleOpen(event)}
-                onContextMenu={handleContextMenu}
-            >
-                <TableCell component="th" id={props.labelId} scope="row" sx={{ padding: '5px 10px' }} align="right">
-                    {data.STT}
-                </TableCell>
-                <TableCell align="left" sx={{ padding: '5px 10px' }}>
-                    {data.NAME_WORKS}
-                </TableCell>
-                <TableCell align="left" sx={{ padding: '5px 10px' }}>
-                    {data.NAME_USERS}
-                </TableCell>
-                <TableCell align="left" sx={{ padding: '5px 10px' }}>
-                    {data.NAME_WORK_LEVELS}
-                </TableCell>
-                <TableCell align="left" sx={{ padding: '5px 10px' }}>
-                    {convert(data.BEGIN_DATE_AT)}
-                </TableCell>
-                <TableCell align="left" sx={{ padding: '5px 10px' }}>
-                    {convert(data.END_DATE_AT)}
-                </TableCell>
-                <TableCell align="left" sx={{ padding: '5px 10px' }}>
-                    {data.STATUS}
-                </TableCell>
-                <TableCell align="left" sx={{ padding: '5px 10px' }}>
-                    {data.NAME_RECEIVERS === '' ? 'Chưa giao' : data.NAME_RECEIVERS}
-                </TableCell>
-                <TableCell align="left" sx={{ padding: '5px 10px' }}>
-                    {data.TOTAL_TIME}
-                </TableCell>
-                <TableCell sx={{ padding: '5px 10px' }}>
-                    <ChangeStatus
-                        miniButton={true}
-                        data={{
-                            ID: data.ID,
-                            STATUS: data.STATUS,
-                        }}
-                        table="work"
-                    />
-                </TableCell>
-                <TableCell sx={{ padding: '5px 10px' }}>
-                    <IconButton aria-label="expand row" size="small" onClick={(event) => handleOpen(event, data.ID)}>
-                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                    </IconButton>
-                </TableCell>
-                <TableCell sx={{ padding: '5px 10px' }}>
-                    <DetailDialog id={data.ID} />
-                </TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
-                    {/* ChildTable */}
-                    <Collapse in={open} timeout="auto" unmountOnExit>
-                        <TableContainer sx={{ maxHeight: 400 }}>
-                            <Table stickyHeader aria-labelledby="tableTitle" size="small">
-                                <ChildHeader
-                                    order={order}
-                                    orderBy={orderBy}
-                                    onRequestSort={handleRequestSort}
-                                    rowCount={childData.length}
-                                />
-                                <TableBody>
-                                    {stableSort(childData, getComparator(order, orderBy)).map((row, index) => {
-                                        row.STT = index + 1;
-                                        return (
-                                            <ChildRow
-                                                key={row.ID}
-                                                data={row}
-                                                isItemSelected={isSelected(row.ID)}
-                                                labelId={`enhanced-table-checkbox-${index}`}
-                                                onClick={(event) => handleClick(event, row.ID)}
-                                            />
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Collapse>
-                    {/* End childTable */}
-                </TableCell>
-            </TableRow>
-            <Menu
-                open={contextMenu !== null}
-                onClose={handleClose}
-                anchorReference="anchorPosition"
-                anchorPosition={
-                    contextMenu !== null ? { top: contextMenu.mouseY, left: contextMenu.mouseX } : undefined
-                }
-            >
-                <MenuItem onClick={handleClose}>Copy</MenuItem>
-                <MenuItem onClick={handleClose}>Print</MenuItem>
-                <MenuItem onClick={handleClose}>Highlight</MenuItem>
-                <MenuItem onClick={handleClose}>Email</MenuItem>
-            </Menu>
-        </React.Fragment>
-    );
+    if (data.length <= 0) {
+        return <React.Fragment></React.Fragment>;
+    } else
+        return (
+            <React.Fragment>
+                <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={props.isItemSelected}
+                    tabIndex={-1}
+                    key={data.ID}
+                    selected={props.isItemSelected}
+                    sx={{ '& > *': { borderBottom: 'unset' } }}
+                    // onClick={(event) => handleOpen(event)}
+                    onContextMenu={handleContextMenu}
+                >
+                    <TableCell component="th" id={props.labelId} scope="row" sx={{ padding: '5px' }} align="right">
+                        {data.STT}
+                    </TableCell>
+                    <TableCell align="left" sx={{ padding: '5px' }}>
+                        {data.NAME_WORKS}
+                    </TableCell>
+                    <TableCell align="left" sx={{ padding: '5px' }}>
+                        {data.NAME_USERS}
+                    </TableCell>
+                    <TableCell align="left" sx={{ padding: '5px' }}>
+                        {data.NAME_WORK_LEVELS}
+                    </TableCell>
+                    <TableCell align="left" sx={{ padding: '5px' }}>
+                        {convert(data.BEGIN_DATE_AT)}
+                    </TableCell>
+                    <TableCell align="left" sx={{ padding: '5px' }}>
+                        {convert(data.END_DATE_AT)}
+                    </TableCell>
+                    <TableCell align="left" sx={{ padding: '5px' }}>
+                        {data.STATUS}
+                    </TableCell>
+                    <TableCell align="left" sx={{ padding: '5px' }}>
+                        {data.NAME_RECEIVERS === '' ? 'Chưa giao' : data.NAME_RECEIVERS}
+                    </TableCell>
+                    <TableCell align="left" sx={{ padding: '5px' }}>
+                        {data.TOTAL_TIME}
+                    </TableCell>
+                    <TableCell sx={{ padding: '0px' }}>
+                        <ChangeStatus
+                            miniButton={true}
+                            data={{
+                                ID: data.ID,
+                                STATUS: data.STATUS,
+                            }}
+                            table="work"
+                        />
+                    </TableCell>
+                    <TableCell sx={{ padding: '0px' }}>
+                        <IconButton
+                            aria-label="expand row"
+                            size="small"
+                            onClick={(event) => handleOpen(event, data.ID)}
+                        >
+                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                        </IconButton>
+                    </TableCell>
+                    <TableCell sx={{ padding: '0px' }}>
+                        <DetailDialog id={data.ID} />
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
+                        {/* ChildTable */}
+                        <Collapse in={open} timeout="auto" unmountOnExit>
+                            <TableContainer sx={{ maxHeight: 400 }}>
+                                <Table stickyHeader aria-labelledby="tableTitle" size="small">
+                                    <ChildHeader
+                                        order={order}
+                                        orderBy={orderBy}
+                                        onRequestSort={handleRequestSort}
+                                        rowCount={childData.length}
+                                    />
+                                    <TableBody>
+                                        {stableSort(childData, getComparator(order, orderBy)).map((row, index) => {
+                                            row.STT = index + 1;
+                                            return (
+                                                <ChildRow
+                                                    key={row.ID}
+                                                    data={row}
+                                                    isItemSelected={isSelected(row.ID)}
+                                                    labelId={`enhanced-table-checkbox-${index}`}
+                                                    onClick={(event) => handleClick(event, row.ID)}
+                                                />
+                                            );
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Collapse>
+                        {/* End childTable */}
+                    </TableCell>
+                </TableRow>
+                <Menu
+                    open={contextMenu !== null}
+                    onClose={handleClose}
+                    anchorReference="anchorPosition"
+                    anchorPosition={
+                        contextMenu !== null ? { top: contextMenu.mouseY, left: contextMenu.mouseX } : undefined
+                    }
+                >
+                    <MenuItem onClick={handleClose}>Copy</MenuItem>
+                    <MenuItem onClick={handleClose}>Print</MenuItem>
+                    <MenuItem onClick={handleClose}>Highlight</MenuItem>
+                    <MenuItem onClick={handleClose}>Email</MenuItem>
+                </Menu>
+            </React.Fragment>
+        );
 }
 
 ChildRow.propTypes = {

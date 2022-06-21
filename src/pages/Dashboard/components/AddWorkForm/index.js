@@ -24,6 +24,7 @@ import levelApi from '~/api/Levels/levelApi';
 // import worksApi from '~/api/Works/worksApi';
 import userApi from '~/api/Users/useApi';
 import typeApi from '~/api/Types/typeApi';
+// import { SUCCESS, ERROR } from '~/components/CustomAlert/constants';
 // import { convert } from '../share';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -51,11 +52,11 @@ function AddWorkForm(props) {
         async function fetchMyAPI() {
             try {
                 const res_type = await typeApi.getAll();
-                setTypes(res_type);
+                setTypes(res_type.data);
                 const res_level = await levelApi.getAll();
-                setLevels(res_level);
+                setLevels(res_level.data);
                 const res_user = await userApi.getAll();
-                setUsers(res_user);
+                setUsers(res_user.data);
             } catch (error) {
                 console.log(error.message);
             }
@@ -106,9 +107,24 @@ function AddWorkForm(props) {
         console.log(data);
         // const res = await worksApi.createWork(data);
         // console.log(res);
+        // if (res.status === 200) {
+        //     props.setNotify({
+        //         open: true,
+        //         type: SUCCESS,
+        //         msg: 'Thêm mới thành công',
+        //     });
+        // } else {
+        //     props.setNotify({
+        //         open: true,
+        //         type: ERROR,
+        //         msg: 'Lỗi: không thể thêm mới',
+        //     });
+        // }
 
         // clearInput();
         // setOpen(false);
+        //Làm mới dữ liệu
+        // props.setRefresh(!props.refresh);
     };
 
     return (

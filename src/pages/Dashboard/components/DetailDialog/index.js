@@ -17,6 +17,8 @@ import EditWorkReceived from '../EditWorkReceived';
 import AddWorkForm from '../AddWorkForm';
 import ChangeStatus from '../ChangeStatus';
 import { convert } from '~/pages/Dashboard/components/share';
+import { SUCCESS } from '~/components/CustomAlert/constants';
+import CustomAlert from '~/components/CustomAlert';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -59,6 +61,12 @@ BootstrapDialogTitle.propTypes = {
 function DetailDialog(props) {
     const [open, setOpen] = React.useState(false);
     const [childData, setChildData] = React.useState([]);
+    const [refresh, setRefresh] = React.useState(false);
+    const [notify, setNotify] = React.useState({
+        open: false,
+        type: SUCCESS,
+        msg: '',
+    });
 
     React.useEffect(() => {
         async function fetchMyAPI() {
@@ -67,27 +75,39 @@ function DetailDialog(props) {
                     ID: props.id,
                 };
                 const res = await worksApi.getById(data_req);
-                // console.log(res);
-                setChildData(res);
+                setChildData(res.data);
             } catch (error) {
                 console.log(error.message);
             }
         }
         if (open) {
             fetchMyAPI();
-            // console.log('open');
         } else {
-            // console.log('close');
             setChildData([]);
         }
     }, [open, props.id]);
+
+    React.useEffect(() => {
+        async function fetchMyAPI() {
+            try {
+                const data_req = {
+                    ID: props.id,
+                };
+                const res = await worksApi.getById(data_req);
+                setChildData(res.data);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+        fetchMyAPI();
+    }, [props.id, refresh]);
 
     const handleClickOpen = async () => {
         setOpen(true);
     };
     const handleClose = () => {
         setOpen(false);
-        // setChildData([]);
+        setChildData([]);
     };
 
     return (
@@ -138,7 +158,10 @@ function DetailDialog(props) {
                                     <TableCell align="right">{childRow.STATUS}</TableCell>
                                     <TableCell>
                                         <ChangeStatus
+                                            setRefresh={setRefresh}
+                                            refresh={refresh}
                                             miniButton={true}
+                                            setNotify={setNotify}
                                             data={{
                                                 ID: childRow.ID,
                                                 STATUS: childRow.STATUS,
@@ -149,6 +172,9 @@ function DetailDialog(props) {
                                     </TableCell>
                                     <TableCell align="right">
                                         <EditWorkReceived
+                                            setRefresh={setRefresh}
+                                            refresh={refresh}
+                                            setNotify={setNotify}
                                             data={{
                                                 ID: childRow.ID,
                                                 USER_ID: childRow.USER_ID,
@@ -161,7 +187,10 @@ function DetailDialog(props) {
                                     </TableCell>
                                     <TableCell>
                                         <AddWorkForm
+                                            setRefresh={setRefresh}
+                                            refresh={refresh}
                                             miniButton={true}
+                                            setNotify={setNotify}
                                             data={{
                                                 WORK_ID: props.id,
                                                 WORK_RECEIVE_ID: childRow.ID,
@@ -176,6 +205,7 @@ function DetailDialog(props) {
                     </Table>
                     {/* End table child */}
                 </Box>
+                <CustomAlert data={notify} onClose={setNotify} />
             </BootstrapDialog>
         </div>
     );

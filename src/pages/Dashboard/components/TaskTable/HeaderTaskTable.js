@@ -37,7 +37,7 @@ function HeaderTaskTable(props) {
                         // padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                         style={{ minWidth: headCell.minWidth }}
-                        sx={{ padding: '5px 10px', backgroundColor: colorCode }}
+                        sx={{ padding: '5px', backgroundColor: colorCode }}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
@@ -57,7 +57,7 @@ function HeaderTaskTable(props) {
                     colSpan={3}
                     align="center"
                     style={{ minWidth: 20 }}
-                    sx={{ padding: '5px 10px', backgroundColor: colorCode }}
+                    sx={{ padding: '5px', backgroundColor: colorCode }}
                 >
                     Công cụ
                 </StyledTableCell>

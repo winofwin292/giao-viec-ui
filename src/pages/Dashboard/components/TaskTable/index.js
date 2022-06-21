@@ -22,8 +22,15 @@ import ToolbarTaskTable from './ToolbarTaskTable';
 import RowTaskTable from './RowTaskTable';
 import worksApi from '~/api/Works/worksApi';
 import AddWorkForm from '../AddWorkForm';
+import { SUCCESS } from '~/components/CustomAlert/constants';
+import CustomAlert from '~/components/CustomAlert';
+import WorkLogsDialog from '../WorkLogs/WorkLogsDialog';
 
 function TaskTable() {
+    var date = new Date();
+    var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('STT');
     const [selected, setSelected] = React.useState([]);
@@ -31,28 +38,34 @@ function TaskTable() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [filterState, setFilterState] = React.useState('all');
-    const [fromDate, setFromDate] = React.useState(new Date());
-    const [toDate, setToDate] = React.useState(new Date());
+    const [fromDate, setFromDate] = React.useState(firstDay);
+    const [toDate, setToDate] = React.useState(lastDay);
+    const [refresh, setRefresh] = React.useState(false);
     const defaultData = React.useRef([]);
     const nameFilter = useSelector((state) => state.user.current.user.NAME_USERS);
+    const [notify, setNotify] = React.useState({
+        open: false,
+        type: SUCCESS,
+        msg: '',
+    });
 
     React.useEffect(() => {
         async function fetchMyAPI() {
             try {
                 let response = await worksApi.getAll();
                 var i = 1;
-                response.forEach((item) => {
+                response.data.forEach((item) => {
                     item.STT = i;
                     i++;
                 });
-                defaultData.current = response.map((element) => element);
-                setData(response);
+                defaultData.current = response.data.map((element) => element);
+                setData(response.data);
             } catch (error) {
                 console.log(error.message);
             }
         }
         fetchMyAPI();
-    }, []);
+    }, [refresh]);
 
     React.useEffect(() => {
         switch (filterState) {
@@ -154,7 +167,7 @@ function TaskTable() {
                     display: 'flex',
                 }}
             >
-                <AddWorkForm sx={{ padding: '10px' }} />
+                <AddWorkForm setNotify={setNotify} setRefresh={setRefresh} refresh={refresh} sx={{ padding: '10px' }} />
                 <FormControl sx={{ minWidth: 150, ml: '5px', height: '36.5px' }} size="small">
                     <InputLabel id="demo-select-small">Hiển thị</InputLabel>
                     <Select
@@ -196,6 +209,7 @@ function TaskTable() {
                         />
                     </FormControl>
                 </LocalizationProvider>
+                <WorkLogsDialog />
             </Paper>
             <Paper sx={{ width: '100%', mb: 2, boxShadow: ' rgb(183 183 183) 0px 1px 10px' }}>
                 <ToolbarTaskTable numSelected={selected.length} />
@@ -217,6 +231,9 @@ function TaskTable() {
                                 .map((row, index) => {
                                     return (
                                         <RowTaskTable
+                                            setRefresh={setRefresh}
+                                            refresh={refresh}
+                                            setNotify={setNotify}
                                             key={row.ID}
                                             data={row}
                                             isItemSelected={isSelected(row.ID)}
@@ -247,6 +264,7 @@ function TaskTable() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
+            <CustomAlert data={notify} onClose={setNotify} />
         </Box>
     );
 }

@@ -15,7 +15,6 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useDispatch } from 'react-redux';
 import { login } from './userSlice';
-import userApi from '~/api/Users/useApi';
 
 const theme = createTheme();
 

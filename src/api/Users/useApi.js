@@ -1,5 +1,4 @@
 import axiosClient from '../axiosClient';
-import StorageKeys from '~/constants/storage-keys';
 
 const userApi = {
     register(data) {

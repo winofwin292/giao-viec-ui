@@ -18,7 +18,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import WorkLogsTable from '../WorkLogsTable';
 import workLogsApi from '~/api/WorkLogs/workLogsApi';
 
@@ -30,9 +30,9 @@ function WorkLogsDialog(props) {
     const [open, setOpen] = React.useState(false);
     const [works, setWorks] = React.useState([]);
     const [work, setWork] = React.useState('');
+    const [logs, setLogs] = React.useState([]);
 
     // const userId = useSelector((state) => state.user.current.id);
-    const [age, setAge] = React.useState('');
 
     const handleChange = (event) => {
         setWork(event.target.value);
@@ -42,6 +42,7 @@ function WorkLogsDialog(props) {
         async function fetchMyAPI() {
             try {
                 const req = {
+                    //sử dụng id cứng
                     ID: 4,
                 };
                 const res = await workLogsApi.getByIdUser(req);
@@ -52,6 +53,52 @@ function WorkLogsDialog(props) {
         }
         fetchMyAPI();
     }, []);
+
+    React.useEffect(() => {
+        async function getLogsApi() {
+            try {
+                const req = {
+                    ID: work,
+                };
+                const res = await workLogsApi.getByIdWork(req);
+                console.log(res.data);
+                res.data.forEach((element, index) => {
+                    element.STT = index + 1;
+                    element.BEGIN_DATE_AT = new Date(element.BEGIN_DATE_AT);
+                    element.END_DATE_AT = new Date(element.END_DATE_AT);
+                    element.CREATED_AT = new Date(element.CREATED_AT);
+                    element.UPDATED_AT = new Date(element.UPDATED_AT);
+                });
+                setLogs(res.data);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+        if (work) {
+            getLogsApi();
+        } else {
+            setLogs([]);
+        }
+    }, [work]);
+
+    const handleAddRows = () => {
+        setLogs((oldRows) => [
+            ...oldRows,
+            {
+                STT: oldRows.length + 1,
+                ID: null,
+                WORK_RECEIVE_ID: work,
+                BEGIN_DATE_AT: new Date(),
+                END_DATE_AT: new Date(),
+                TIME_WORK_LOGS: 0,
+                TIME_CHECK: 0,
+                CONTENT: '',
+                TITLE: '',
+                CREATED_AT: new Date(),
+                UPDATED_AT: new Date(),
+            },
+        ]);
+    };
 
     const handleClickOpen = async () => {
         setOpen(true);
@@ -64,7 +111,9 @@ function WorkLogsDialog(props) {
         setOpen(false);
     };
 
-    const handleSave = async () => {};
+    const handleSave = () => {
+        console.log(logs);
+    };
 
     return (
         <div style={{ marginLeft: '5px' }}>
@@ -121,11 +170,18 @@ function WorkLogsDialog(props) {
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12}>
-                                <Button>Chức năng 1</Button>
+                                <Button onClick={handleAddRows}>Thêm dòng mới</Button>
                                 <Button>Chức năng 2</Button>
                             </Grid>
-                            <Grid item xs={12}>
-                                <WorkLogsTable />
+                            <Grid item xs={12} sx={{ height: '470px', minWidth: '100%' }}>
+                                <WorkLogsTable
+                                    data={{
+                                        logs: logs,
+                                    }}
+                                    func={{
+                                        setLogs,
+                                    }}
+                                />
                             </Grid>
 
                             <Grid item xs={12} sx={{ m: '0 2' }}>

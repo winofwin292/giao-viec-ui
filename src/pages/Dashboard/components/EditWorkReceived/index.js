@@ -100,7 +100,7 @@ function EditWorkReceived(props) {
             props.setNotify({
                 open: true,
                 type: SUCCESS,
-                msg: 'Chỉnh sửa thành thành công',
+                msg: 'Chỉnh sửa thành công',
             });
         } else {
             props.setNotify({
@@ -163,6 +163,7 @@ function EditWorkReceived(props) {
                                     label="Ngày bắt đầu"
                                     value={beginDate}
                                     minDate={new Date(oldData.BEGIN_DATE_AT)}
+                                    maxDate={endDate}
                                     onChange={handlePickBeginDate}
                                     inputFormat="dd/MM/yyyy"
                                     renderInput={(params) => <TextField size="small" {...params} />}
@@ -176,6 +177,7 @@ function EditWorkReceived(props) {
                                     label="Ngày kết thúc"
                                     value={endDate}
                                     minDate={beginDate}
+                                    maxDate={new Date(props.data.MAX_END_DATE_AT)}
                                     onChange={handlePickEndDate}
                                     inputFormat="dd/MM/yyyy"
                                     renderInput={(params) => <TextField size="small" {...params} />}

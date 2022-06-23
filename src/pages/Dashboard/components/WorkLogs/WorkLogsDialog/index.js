@@ -21,6 +21,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 // import { useSelector } from 'react-redux';
 import WorkLogsTable from '../WorkLogsTable';
 import workLogsApi from '~/api/WorkLogs/workLogsApi';
+import { SUCCESS, ERROR } from '~/components/CustomAlert/constants';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -61,7 +62,6 @@ function WorkLogsDialog(props) {
                     ID: work,
                 };
                 const res = await workLogsApi.getByIdWork(req);
-                console.log(res.data);
                 res.data.forEach((element, index) => {
                     element.STT = index + 1;
                     element.BEGIN_DATE_AT = new Date(element.BEGIN_DATE_AT);
@@ -100,19 +100,34 @@ function WorkLogsDialog(props) {
         ]);
     };
 
-    const handleClickOpen = async () => {
+    const handleClickOpen = () => {
         setOpen(true);
     };
 
-    const clearInput = () => {};
-
     const handleClose = () => {
-        clearInput();
+        setWork('');
         setOpen(false);
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         console.log(logs);
+        const res = await workLogsApi.addLogs(logs);
+        console.log(res);
+        if (res.status === 200) {
+            props.setNotify({
+                open: true,
+                type: SUCCESS,
+                msg: 'Thêm thành công',
+            });
+        } else {
+            props.setNotify({
+                open: true,
+                type: ERROR,
+                msg: 'Lỗi: không thêm được dữ liệu',
+            });
+        }
+
+        handleClose();
     };
 
     return (
@@ -122,7 +137,7 @@ function WorkLogsDialog(props) {
                     variant="outlined"
                     sx={{ height: '40px' }}
                     onClick={handleClickOpen}
-                    startIcon={<AddCircleIcon />}
+                    // startIcon={<AddCircleIcon />}
                 >
                     Demo Logs
                 </Button>
@@ -158,9 +173,9 @@ function WorkLogsDialog(props) {
                                         label="Công việc"
                                         onChange={handleChange}
                                     >
-                                        <MenuItem value="">
+                                        {/* <MenuItem value="">
                                             <em>Chọn công việc</em>
-                                        </MenuItem>
+                                        </MenuItem> */}
                                         {works.map((element, index) => (
                                             <MenuItem key={index} value={element.ID}>
                                                 {element.NAME_WORKS}

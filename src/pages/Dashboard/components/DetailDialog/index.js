@@ -72,7 +72,7 @@ function DetailDialog(props) {
         async function fetchMyAPI() {
             try {
                 const data_req = {
-                    ID: props.id,
+                    ID: props.data.id,
                 };
                 const res = await worksApi.getById(data_req);
                 setChildData(res.data);
@@ -85,13 +85,13 @@ function DetailDialog(props) {
         } else {
             setChildData([]);
         }
-    }, [open, props.id]);
+    }, [open, props.data.id]);
 
     React.useEffect(() => {
         async function fetchMyAPI() {
             try {
                 const data_req = {
-                    ID: props.id,
+                    ID: props.data.id,
                 };
                 const res = await worksApi.getById(data_req);
                 setChildData(res.data);
@@ -100,7 +100,7 @@ function DetailDialog(props) {
             }
         }
         fetchMyAPI();
-    }, [props.id, refresh]);
+    }, [props.data.id, refresh]);
 
     const handleClickOpen = async () => {
         setOpen(true);
@@ -182,6 +182,8 @@ function DetailDialog(props) {
                                                 COMMENT_WORK_RECEIVE: childRow.COMMENT_WORK_RECEIVE,
                                                 BEGIN_DATE_AT: childRow.BEGIN_DATE_AT,
                                                 END_DATE_AT: childRow.END_DATE_AT,
+
+                                                MAX_END_DATE_AT: props.data.END_DATE_AT,
                                             }}
                                         />
                                     </TableCell>

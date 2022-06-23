@@ -169,7 +169,12 @@ function RowTaskTable(props) {
                         </IconButton>
                     </TableCell>
                     <TableCell sx={{ padding: '0px' }}>
-                        <DetailDialog id={data.ID} />
+                        <DetailDialog
+                            data={{
+                                id: data.ID,
+                                END_DATE_AT: data.END_DATE_AT,
+                            }}
+                        />
                     </TableCell>
                 </TableRow>
                 <TableRow>

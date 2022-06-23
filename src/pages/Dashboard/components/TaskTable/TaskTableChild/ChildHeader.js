@@ -8,7 +8,7 @@ import { headCells, StyledTableCell } from '~/pages/Dashboard/components/share';
 
 function ChildHeader(props) {
     const { order, orderBy, onRequestSort } = props;
-    const colorCode = ['#03a9f4', '#0288d1', '#01579b'][Math.floor(Math.random() * 3)] + '!important';
+    // const colorCode = ['#03a9f4', '#0288d1', '#01579b'][Math.floor(Math.random() * 3)] + '!important';
 
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
@@ -24,7 +24,7 @@ function ChildHeader(props) {
                         // padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                         style={{ minWidth: headCell.minWidth }}
-                        sx={{ padding: '5px', backgroundColor: colorCode }}
+                        sx={{ padding: '5px' }}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
@@ -44,7 +44,10 @@ function ChildHeader(props) {
                     colSpan={3}
                     align="center"
                     style={{ minWidth: 20 }}
-                    sx={{ padding: '5px', backgroundColor: colorCode }}
+                    sx={{
+                        padding: '5px',
+                        //backgroundColor: colorCode
+                    }}
                 >
                     Công cụ
                 </StyledTableCell>

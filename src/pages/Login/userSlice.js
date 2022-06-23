@@ -19,7 +19,7 @@ export const login = createAsyncThunk('/login', async (payload) => {
             user,
         };
 
-        localStorage.setItem(StorageKeys.user, JSON.stringify(data));
+        // localStorage.setItem(StorageKeys.user, JSON.stringify(data));
 
         return data;
     } catch (error) {
@@ -31,17 +31,19 @@ export const login = createAsyncThunk('/login', async (payload) => {
 const userSlice = createSlice({
     name: 'user',
     initialState: {
-        current: JSON.parse(localStorage.getItem(StorageKeys.user)) || {},
+        //khởi tạo giá trị mặc định cho redux
+        // current: JSON.parse(localStorage.getItem(StorageKeys.user)) || {},
+        current: {},
         settings: {},
     },
     reducers: {
-        // logout(state) {
-        //     //clear local storage
-        //     state.current = {};
-        //     localStorage.removeItem(StorageKeys.access);
-        //     localStorage.removeItem(StorageKeys.refresh);
-        //     localStorage.removeItem(StorageKeys.user);
-        // },
+        logout(state) {
+            //clear local storage
+            state.current = {};
+            localStorage.removeItem(StorageKeys.access);
+            localStorage.removeItem(StorageKeys.refresh);
+            localStorage.removeItem(StorageKeys.user);
+        },
     },
     extraReducers: {
         [login.fulfilled]: (state, action) => {

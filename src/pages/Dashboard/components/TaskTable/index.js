@@ -25,6 +25,7 @@ import AddWorkForm from '../AddWorkForm';
 import { SUCCESS } from '~/components/CustomAlert/constants';
 import CustomAlert from '~/components/CustomAlert';
 import WorkLogsDialog from '../WorkLogs/WorkLogsDialog';
+import ReadXLSX from '../ReadXLSX';
 
 function TaskTable() {
     var date = new Date();
@@ -209,7 +210,8 @@ function TaskTable() {
                         />
                     </FormControl>
                 </LocalizationProvider>
-                <WorkLogsDialog />
+                <WorkLogsDialog setNotify={setNotify} />
+                <ReadXLSX />
             </Paper>
             <Paper sx={{ width: '100%', mb: 2, boxShadow: ' rgb(183 183 183) 0px 1px 10px' }}>
                 <ToolbarTaskTable numSelected={selected.length} />

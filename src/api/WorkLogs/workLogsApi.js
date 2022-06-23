@@ -9,6 +9,10 @@ const workLogsApi = {
         const url = '/logs/receive_id';
         return axiosClient.post(url, data);
     },
+    addLogs(data) {
+        const url = '/logs/create';
+        return axiosClient.post(url, data);
+    },
 };
 
 export default workLogsApi;

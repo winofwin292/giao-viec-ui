@@ -135,6 +135,7 @@ function ChildRow(props) {
                             data={{
                                 ID: data.ID,
                                 STATUS: data.STATUS,
+                                USER_ID: data.USER_ID,
                             }}
                             table="work"
                         />

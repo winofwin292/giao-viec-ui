@@ -18,7 +18,7 @@ import { login } from './userSlice';
 
 const theme = createTheme();
 
-function Login({ setToken }) {
+function Login() {
     const dispatch = useDispatch();
     const [username, setUserName] = useState();
     const [password, setPassword] = useState();

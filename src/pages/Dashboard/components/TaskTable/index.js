@@ -28,22 +28,24 @@ import WorkLogsDialog from '../WorkLogs/WorkLogsDialog';
 import ReadXLSX from '../ReadXLSX';
 
 function TaskTable() {
-    var date = new Date();
-    var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('STT');
     const [selected, setSelected] = React.useState([]);
     const [data, setData] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [filterState, setFilterState] = React.useState('all');
-    const [fromDate, setFromDate] = React.useState(firstDay);
-    const [toDate, setToDate] = React.useState(lastDay);
     const [refresh, setRefresh] = React.useState(false);
     const defaultData = React.useRef([]);
+
+    const [task, setTask] = React.useState('all');
     const nameFilter = useSelector((state) => state.user.current.user.NAME_USERS);
+    var date = new Date();
+    var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    const [fromDate, setFromDate] = React.useState(firstDay);
+    const [toDate, setToDate] = React.useState(lastDay);
+    const [state, setState] = React.useState('all');
+
     const [notify, setNotify] = React.useState({
         open: false,
         type: SUCCESS,
@@ -69,33 +71,59 @@ function TaskTable() {
     }, [refresh]);
 
     React.useEffect(() => {
-        switch (filterState) {
+        let strState = null,
+            filterTemp1 = [],
+            filterTemp2 = [];
+
+        if (state === 'completed') {
+            strState = 'Hoàn thành';
+        } else if (state === 'incomplete') {
+            strState = 'Chưa hoàn thành';
+        }
+
+        switch (task) {
             case 'created':
-                const filtered = defaultData.current.filter(
+                filterTemp1 = defaultData.current.filter(
                     (element) =>
                         element.NAME_USERS === nameFilter &&
                         new Date(element.BEGIN_DATE_AT) >= fromDate &&
                         new Date(element.END_DATE_AT) <= toDate,
                 );
-                setData(filtered);
+
+                if (strState === null) {
+                    setData(filterTemp1);
+                } else {
+                    filterTemp2 = filterTemp1.filter((e) => e.STATUS === strState);
+                    setData(filterTemp2);
+                }
                 break;
             case 'received':
-                const filtered1 = defaultData.current.filter(
+                filterTemp1 = defaultData.current.filter(
                     (element) =>
                         element.NAME_RECEIVERS.includes(nameFilter) &&
                         new Date(element.BEGIN_DATE_AT) >= fromDate &&
                         new Date(element.END_DATE_AT) <= toDate,
                 );
-                setData(filtered1);
+                if (strState === null) {
+                    setData(filterTemp1);
+                } else {
+                    filterTemp2 = filterTemp1.filter((e) => e.STATUS === strState);
+                    setData(filterTemp2);
+                }
                 break;
             default:
-                const filtered2 = defaultData.current.filter(
+                filterTemp1 = defaultData.current.filter(
                     (element) => new Date(element.BEGIN_DATE_AT) >= fromDate && new Date(element.END_DATE_AT) <= toDate,
                 );
-                setData(filtered2);
+                if (strState === null) {
+                    setData(filterTemp1);
+                } else {
+                    filterTemp2 = filterTemp1.filter((e) => e.STATUS === strState);
+                    setData(filterTemp2);
+                }
                 break;
         }
-    }, [filterState, fromDate, nameFilter, toDate]);
+    }, [task, fromDate, nameFilter, state, toDate]);
 
     const handleFromDate = (newDate) => {
         setFromDate(newDate);
@@ -104,8 +132,11 @@ function TaskTable() {
         setToDate(newDate);
     };
 
-    const handleSelect = (event) => {
-        setFilterState(event.target.value);
+    const handleSelectTask = (event) => {
+        setTask(event.target.value);
+    };
+    const handleSelectState = (event) => {
+        setState(event.target.value);
     };
 
     const handleRequestSort = (event, property) => {
@@ -170,18 +201,33 @@ function TaskTable() {
             >
                 <AddWorkForm setNotify={setNotify} setRefresh={setRefresh} refresh={refresh} sx={{ padding: '10px' }} />
                 <FormControl sx={{ minWidth: 150, ml: '5px', height: '36.5px' }} size="small">
-                    <InputLabel id="demo-select-small">Hiển thị</InputLabel>
+                    <InputLabel id="select-task">Hiển thị</InputLabel>
                     <Select
-                        labelId="demo-select-small"
-                        id="demo-select-small"
-                        value={filterState}
+                        labelId="select-task"
+                        id="select-task"
+                        value={task}
                         label="Hiển thị"
                         autoWidth
-                        onChange={handleSelect}
+                        onChange={handleSelectTask}
                     >
                         <MenuItem value="all">Tất cả</MenuItem>
                         <MenuItem value="created">Đã tạo</MenuItem>
                         <MenuItem value="received">Đã nhận</MenuItem>
+                    </Select>
+                </FormControl>
+                <FormControl sx={{ minWidth: 150, ml: '5px', height: '36.5px' }} size="small">
+                    <InputLabel id="select-state">Trạng thái</InputLabel>
+                    <Select
+                        labelId="select-state"
+                        id="select-state"
+                        value={state}
+                        label="Trạng thái"
+                        autoWidth
+                        onChange={handleSelectState}
+                    >
+                        <MenuItem value="all">Tất cả</MenuItem>
+                        <MenuItem value="completed">Hoàn thành</MenuItem>
+                        <MenuItem value="incomplete">Chưa hoàn thành</MenuItem>
                     </Select>
                 </FormControl>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>

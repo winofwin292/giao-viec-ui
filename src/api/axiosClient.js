@@ -2,13 +2,14 @@ import axios from 'axios';
 import StorageKeys from '~/constants/storage-keys';
 
 const axiosClient = axios.create({
-    baseURL: 'http://192.168.2.105:8081/',
-    // baseURL: 'http://127.0.0.1:8081/',
+    // baseURL: 'http://192.168.2.105:8081/',
+    baseURL: 'http://127.0.0.1:8081/',
     headers: {
         'content-type': 'application/json',
     },
 });
 
+//Tự động thêm token khi gởi request
 axiosClient.interceptors.request.use(
     function (config) {
         const customHeaders = {};
@@ -30,6 +31,7 @@ axiosClient.interceptors.request.use(
     },
 );
 
+//Xử lý response trả về
 axiosClient.interceptors.response.use(
     function (response) {
         return response;

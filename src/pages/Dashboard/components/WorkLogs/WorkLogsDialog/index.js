@@ -11,7 +11,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -110,9 +109,9 @@ function WorkLogsDialog(props) {
     };
 
     const handleSave = async () => {
-        console.log(logs);
+        // console.log(logs);
         const res = await workLogsApi.addLogs(logs);
-        console.log(res);
+        // console.log(res);
         if (res.status === 200) {
             props.setNotify({
                 open: true,

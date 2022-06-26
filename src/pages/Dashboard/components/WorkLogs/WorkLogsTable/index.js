@@ -65,6 +65,11 @@ function WorkLogsTable(props) {
             getRowId={(row) => row.STT}
             rowHeight={30}
             onCellEditCommit={handleRowEditCommit}
+            initialState={{
+                sorting: {
+                    sortModel: [{ field: 'STT', sort: 'desc' }],
+                },
+            }}
         />
     );
 }

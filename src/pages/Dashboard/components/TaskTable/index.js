@@ -1,24 +1,17 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
+import { Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from '@mui/material';
+import { Box, Paper, MenuItem } from '@mui/material';
+import { FormControl, Select, InputLabel, TextField } from '@mui/material';
+
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+
 import { useSelector } from 'react-redux';
+
 import HeaderTaskTable from './HeaderTaskTable';
 import { getComparator, stableSort } from './sortTaskTable';
-import ToolbarTaskTable from './ToolbarTaskTable';
+// import ToolbarTaskTable from './ToolbarTaskTable';
 import RowTaskTable from './RowTaskTable';
 import worksApi from '~/api/Works/worksApi';
 import AddWorkForm from '../AddWorkForm';
@@ -70,59 +63,43 @@ function TaskTable() {
         fetchMyAPI();
     }, [refresh]);
 
+    //Lọc
     React.useEffect(() => {
-        let strState = null,
-            filterTemp1 = [],
+        let filterTemp1 = [],
             filterTemp2 = [];
 
+        //Lọc trạng thái công việc và thời gian
         if (state === 'completed') {
-            strState = 'Hoàn thành';
+            filterTemp1 = defaultData.current.filter(
+                (e) =>
+                    e.STATUS === 'Hoàn thành' &&
+                    new Date(e.BEGIN_DATE_AT) >= fromDate &&
+                    new Date(e.END_DATE_AT) <= toDate,
+            );
         } else if (state === 'incomplete') {
-            strState = 'Chưa hoàn thành';
+            filterTemp1 = defaultData.current.filter(
+                (e) =>
+                    e.STATUS === 'Chưa hoàn thành' &&
+                    new Date(e.BEGIN_DATE_AT) >= fromDate &&
+                    new Date(e.END_DATE_AT) <= toDate,
+            );
+        } else {
+            filterTemp1 = defaultData.current.filter(
+                (e) => new Date(e.BEGIN_DATE_AT) >= fromDate && new Date(e.END_DATE_AT) <= toDate,
+            );
         }
 
-        switch (task) {
-            case 'created':
-                filterTemp1 = defaultData.current.filter(
-                    (element) =>
-                        element.NAME_USERS === nameFilter &&
-                        new Date(element.BEGIN_DATE_AT) >= fromDate &&
-                        new Date(element.END_DATE_AT) <= toDate,
-                );
-
-                if (strState === null) {
-                    setData(filterTemp1);
-                } else {
-                    filterTemp2 = filterTemp1.filter((e) => e.STATUS === strState);
-                    setData(filterTemp2);
-                }
-                break;
-            case 'received':
-                filterTemp1 = defaultData.current.filter(
-                    (element) =>
-                        element.NAME_RECEIVERS.includes(nameFilter) &&
-                        new Date(element.BEGIN_DATE_AT) >= fromDate &&
-                        new Date(element.END_DATE_AT) <= toDate,
-                );
-                if (strState === null) {
-                    setData(filterTemp1);
-                } else {
-                    filterTemp2 = filterTemp1.filter((e) => e.STATUS === strState);
-                    setData(filterTemp2);
-                }
-                break;
-            default:
-                filterTemp1 = defaultData.current.filter(
-                    (element) => new Date(element.BEGIN_DATE_AT) >= fromDate && new Date(element.END_DATE_AT) <= toDate,
-                );
-                if (strState === null) {
-                    setData(filterTemp1);
-                } else {
-                    filterTemp2 = filterTemp1.filter((e) => e.STATUS === strState);
-                    setData(filterTemp2);
-                }
-                break;
+        //Lọc theo người tạo hoặc người nhận
+        if (task === 'created') {
+            filterTemp2 = filterTemp1.filter((e) => e.NAME_USERS === nameFilter);
+        } else if (task === 'received') {
+            filterTemp2 = filterTemp1.filter((e) => e.NAME_RECEIVERS.includes(nameFilter));
+        } else {
+            filterTemp2 = filterTemp1;
         }
+
+        //Set data cho bảng
+        setData(filterTemp2);
     }, [task, fromDate, nameFilter, state, toDate]);
 
     const handleFromDate = (newDate) => {
@@ -231,7 +208,7 @@ function TaskTable() {
                     </Select>
                 </FormControl>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <FormControl sx={{ minWidth: 150, ml: '5px', height: '36.5px' }} size="small">
+                    <FormControl sx={{ minWidth: 150, ml: '5px' }} size="small">
                         <DesktopDatePicker
                             label="Từ ngày"
                             value={fromDate}
@@ -243,7 +220,7 @@ function TaskTable() {
                             disableMaskedInput
                         />
                     </FormControl>
-                    <FormControl sx={{ minWidth: 150, ml: '5px', height: '36.5px' }} size="small">
+                    <FormControl sx={{ minWidth: 150, ml: '5px' }} size="small">
                         <DesktopDatePicker
                             label="Đến ngày"
                             value={toDate}
@@ -260,8 +237,8 @@ function TaskTable() {
                 <ReadXLSX />
             </Paper>
             <Paper sx={{ width: '100%', mb: 2, boxShadow: ' rgb(183 183 183) 0px 1px 10px' }}>
-                <ToolbarTaskTable numSelected={selected.length} />
-                <TableContainer sx={{ maxHeight: 400 }}>
+                {/* <ToolbarTaskTable numSelected={selected.length} /> */}
+                <TableContainer sx={{ maxHeight: 485 }}>
                     <Table stickyHeader aria-labelledby="tableTitle" size="small">
                         <HeaderTaskTable
                             numSelected={selected.length}

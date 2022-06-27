@@ -12,17 +12,11 @@ function HeaderTaskTable(props) {
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
-    // const colorCode =
-    //     ['#03a9f4', '#0288d1', '#01579b', '#4caf50', '#2e7d32', '#1b5e20'][Math.floor(Math.random() * 5)] +
-    //     '!important';
 
     return (
         <TableHead>
             <TableRow>
-                <StyledTableCell
-                    padding="checkbox"
-                    // sx={{ backgroundColor: colorCode }}
-                >
+                <StyledTableCell padding="checkbox" sx={{ backgroundColor: '#03a9f4' }}>
                     <Checkbox
                         color="primary"
                         indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -37,12 +31,10 @@ function HeaderTaskTable(props) {
                     <StyledTableCell
                         key={headCell.id}
                         align={headCell.numeric ? 'right' : 'left'}
-                        // padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                         style={{ minWidth: headCell.minWidth }}
                         sx={{
                             padding: '5px',
-                            // backgroundColor: colorCode
                         }}
                     >
                         <TableSortLabel
@@ -65,7 +57,6 @@ function HeaderTaskTable(props) {
                     style={{ minWidth: 20 }}
                     sx={{
                         padding: '5px',
-                        // backgroundColor: colorCode
                     }}
                 >
                     Công cụ

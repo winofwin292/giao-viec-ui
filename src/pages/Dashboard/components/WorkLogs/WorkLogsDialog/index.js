@@ -1,22 +1,11 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import Fab from '@mui/material/Fab';
-import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
-import Slide from '@mui/material/Slide';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import { AppBar, Box, Button, Dialog, Fab, Grid, IconButton, TextField } from '@mui/material';
+import { Slide, Toolbar, Typography, InputLabel, MenuItem, FormControl, Select } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 // import { useSelector } from 'react-redux';
 import WorkLogsTable from '../WorkLogsTable';
 import workLogsApi from '~/api/WorkLogs/workLogsApi';
@@ -28,22 +17,33 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function WorkLogsDialog(props) {
     const [open, setOpen] = React.useState(false);
+    const [data, setData] = React.useState([]);
+    const [totalTime, setTotalTime] = React.useState(0);
+
+    //variable lọc
+    var date = new Date();
+    var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    const [fromDate, setFromDate] = React.useState(firstDay);
+    const [toDate, setToDate] = React.useState(lastDay);
     const [works, setWorks] = React.useState([]);
-    const [work, setWork] = React.useState('');
+    const [work, setWork] = React.useState(-1);
     const [logs, setLogs] = React.useState([]);
 
+    //user id gán cứng
+    const userId = 4;
     // const userId = useSelector((state) => state.user.current.id);
 
     const handleChange = (event) => {
         setWork(event.target.value);
     };
 
+    //Lấy danh sách công việc cho select
     React.useEffect(() => {
-        async function fetchMyAPI() {
+        async function getWorksAPI() {
             try {
                 const req = {
-                    //sử dụng id cứng
-                    ID: 4,
+                    ID: userId,
                 };
                 const res = await workLogsApi.getByIdUser(req);
                 setWorks(res.data);
@@ -51,16 +51,17 @@ function WorkLogsDialog(props) {
                 console.log(error.message);
             }
         }
-        fetchMyAPI();
+        getWorksAPI();
     }, []);
 
+    //Lấy tất cả log của user đang login
     React.useEffect(() => {
-        async function getLogsApi() {
+        async function getAllLogAPI() {
             try {
                 const req = {
-                    ID: work,
+                    ID: userId,
                 };
-                const res = await workLogsApi.getByIdWork(req);
+                const res = await workLogsApi.getAllLogByIdUser(req);
                 res.data.forEach((element, index) => {
                     element.STT = index + 1;
                     element.BEGIN_DATE_AT = new Date(element.BEGIN_DATE_AT);
@@ -73,15 +74,34 @@ function WorkLogsDialog(props) {
                 console.log(error.message);
             }
         }
-        if (work) {
-            getLogsApi();
-        } else {
-            setLogs([]);
-        }
-    }, [work]);
+        getAllLogAPI();
+    }, []);
 
+    React.useEffect(() => {
+        //lấy log theo id công việc
+        let temp = [],
+            total;
+
+        if (work === -1) {
+            temp = logs.filter((e) => new Date(e.BEGIN_DATE_AT) >= fromDate && new Date(e.END_DATE_AT) <= toDate);
+        } else {
+            temp = logs.filter(
+                (e) =>
+                    e.WORK_RECEIVE_ID === work &&
+                    new Date(e.BEGIN_DATE_AT) >= fromDate &&
+                    new Date(e.END_DATE_AT) <= toDate,
+            );
+        }
+
+        //tính tổng giờ làm việc
+        total = temp.reduce((partialTotal, e) => (partialTotal += e.TIME_WORK_LOGS), 0);
+        setTotalTime(total);
+        setData(temp);
+    }, [fromDate, logs, toDate, work]);
+
+    //thêm 1 dòng mới cho log
     const handleAddRows = () => {
-        setLogs((oldRows) => [
+        setData((oldRows) => [
             ...oldRows,
             {
                 STT: oldRows.length + 1,
@@ -104,13 +124,23 @@ function WorkLogsDialog(props) {
     };
 
     const handleClose = () => {
-        setWork('');
+        setWork(-1);
         setOpen(false);
     };
 
+    //sự kiện thay chọn ngày
+    const handleFromDate = (newDate) => {
+        setFromDate(newDate);
+    };
+
+    const handleToDate = (newDate) => {
+        setToDate(newDate);
+    };
+
+    //Lưu log
     const handleSave = async () => {
         // console.log(logs);
-        const res = await workLogsApi.addLogs(logs);
+        const res = await workLogsApi.addLogs(data);
         // console.log(res);
         if (res.status === 200) {
             props.setNotify({
@@ -162,26 +192,65 @@ function WorkLogsDialog(props) {
                         autoComplete="off"
                     >
                         <Grid container>
-                            <Grid item xs={12}>
-                                <FormControl sx={{ mt: 2, mb: 2, minWidth: '100%' }} size="small">
-                                    <InputLabel id="select-works">Công việc</InputLabel>
-                                    <Select
-                                        labelId="select-works"
-                                        id="select-works"
-                                        value={work}
-                                        label="Công việc"
-                                        onChange={handleChange}
-                                    >
-                                        {/* <MenuItem value="">
-                                            <em>Chọn công việc</em>
-                                        </MenuItem> */}
-                                        {works.map((element, index) => (
-                                            <MenuItem key={index} value={element.ID}>
-                                                {element.NAME_WORKS}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                            <Grid container item xs={12}>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <Grid item xs={2}>
+                                        <FormControl sx={{ minWidth: '100%' }} size="small">
+                                            <DesktopDatePicker
+                                                label="Từ ngày"
+                                                value={fromDate}
+                                                // minDate={beginDate}
+                                                maxDate={toDate}
+                                                onChange={handleFromDate}
+                                                inputFormat="dd/MM/yyyy"
+                                                renderInput={(params) => (
+                                                    <TextField sx={{ ml: '0px !important' }} size="small" {...params} />
+                                                )}
+                                                disableMaskedInput
+                                            />
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <FormControl sx={{ minWidth: '100%' }} size="small">
+                                            <DesktopDatePicker
+                                                label="Đến ngày"
+                                                value={toDate}
+                                                // minDate={beginDate}
+                                                // maxDate={toDate}
+                                                onChange={handleToDate}
+                                                inputFormat="dd/MM/yyyy"
+                                                renderInput={(params) => (
+                                                    <TextField sx={{ ml: '0px !important' }} size="small" {...params} />
+                                                )}
+                                                disableMaskedInput
+                                            />
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <FormControl sx={{ m: 2, ml: '0px !important', minWidth: '100%' }} size="small">
+                                            <InputLabel id="select-works">Công việc</InputLabel>
+                                            <Select
+                                                labelId="select-works"
+                                                id="select-works"
+                                                value={work}
+                                                label="Công việc"
+                                                onChange={handleChange}
+                                            >
+                                                <MenuItem value={-1}>Tất cả</MenuItem>
+                                                {works.map((element, index) => (
+                                                    <MenuItem key={index} value={element.ID}>
+                                                        {element.NAME_WORKS}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs>
+                                        <Typography sx={{ m: 2, minWidth: '100%' }}>
+                                            Tổng số giờ làm việc: {totalTime} giờ
+                                        </Typography>
+                                    </Grid>
+                                </LocalizationProvider>
                             </Grid>
                             <Grid item xs={12}>
                                 <Button onClick={handleAddRows}>Thêm dòng mới</Button>
@@ -190,10 +259,10 @@ function WorkLogsDialog(props) {
                             <Grid item xs={12} sx={{ height: '470px', minWidth: '100%' }}>
                                 <WorkLogsTable
                                     data={{
-                                        logs: logs,
+                                        logs: data,
                                     }}
                                     func={{
-                                        setLogs,
+                                        setData,
                                     }}
                                 />
                             </Grid>

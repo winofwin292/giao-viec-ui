@@ -117,7 +117,7 @@ function DetailDialog(props) {
             </IconButton>
             <BootstrapDialog
                 fullWidth
-                maxWidth="lg"
+                maxWidth="xl"
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"
                 open={open}

@@ -16,6 +16,12 @@ export const headCells = [
         minWidth: 150,
     },
     {
+        id: 'NAME_PROJECT',
+        numeric: false,
+        label: 'Dự án',
+        minWidth: 150,
+    },
+    {
         id: 'NAME_USERS',
         numeric: false,
         label: 'Người tạo',
@@ -26,6 +32,18 @@ export const headCells = [
         numeric: false,
         label: 'Loại',
         minWidth: 170,
+    },
+    {
+        id: 'NOTE',
+        numeric: false,
+        label: 'Nội dung',
+        minWidth: 200,
+    },
+    {
+        id: 'WORK_GOALS',
+        numeric: false,
+        label: 'Mục tiêu công việc',
+        minWidth: 200,
     },
     {
         id: 'BEGIN_DATE_AT',

@@ -125,10 +125,19 @@ function RowTaskTable(props) {
                         {data.NAME_WORKS}
                     </TableCell>
                     <TableCell align="left" sx={{ padding: '5px' }}>
+                        {data.NAME_PROJECT}
+                    </TableCell>
+                    <TableCell align="left" sx={{ padding: '5px' }}>
                         {data.NAME_USERS}
                     </TableCell>
                     <TableCell align="left" sx={{ padding: '5px' }}>
                         {data.NAME_WORK_LEVELS}
+                    </TableCell>
+                    <TableCell align="left" sx={{ padding: '5px' }}>
+                        {data.NOTE}
+                    </TableCell>
+                    <TableCell align="left" sx={{ padding: '5px' }}>
+                        {data.WORK_GOALS}
                     </TableCell>
                     <TableCell align="left" sx={{ padding: '5px' }}>
                         {convert(data.BEGIN_DATE_AT)}

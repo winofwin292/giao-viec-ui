@@ -20,6 +20,7 @@ export default function SelectAutoWidth(props) {
                 autoWidth
                 label={props.label}
                 size="small"
+                disabled={props.disabled ? true : false}
             >
                 <MenuItem value="">
                     <em>{props.label}</em>

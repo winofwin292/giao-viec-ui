@@ -14,6 +14,7 @@ import { getComparator, stableSort } from './sortTaskTable';
 // import ToolbarTaskTable from './ToolbarTaskTable';
 import RowTaskTable from './RowTaskTable';
 import worksApi from '~/api/Works/worksApi';
+import projectApi from '~/api/Projects/projectApi';
 import AddWorkForm from '../AddWorkForm';
 import { SUCCESS } from '~/components/CustomAlert/constants';
 import CustomAlert from '~/components/CustomAlert';
@@ -38,6 +39,8 @@ function TaskTable() {
     const [fromDate, setFromDate] = React.useState(firstDay);
     const [toDate, setToDate] = React.useState(lastDay);
     const [state, setState] = React.useState('all');
+    const [projects, setProjects] = React.useState([]);
+    const [project, setProject] = React.useState('-1');
 
     const [notify, setNotify] = React.useState({
         open: false,
@@ -56,6 +59,8 @@ function TaskTable() {
                 });
                 defaultData.current = response.data.map((element) => element);
                 setData(response.data);
+                const res_project = await projectApi.getAll();
+                setProjects(res_project.data);
             } catch (error) {
                 console.log(error.message);
             }
@@ -66,7 +71,8 @@ function TaskTable() {
     //Lọc
     React.useEffect(() => {
         let filterTemp1 = [],
-            filterTemp2 = [];
+            filterTemp2 = [],
+            filterTemp3 = [];
 
         //Lọc trạng thái công việc và thời gian
         if (state === 'completed') {
@@ -98,9 +104,15 @@ function TaskTable() {
             filterTemp2 = filterTemp1;
         }
 
+        if (project === '-1') {
+            filterTemp3 = filterTemp2;
+        } else {
+            let nameProject = projects.find((i) => i.ID === project).NAME_PROJECT;
+            filterTemp3 = filterTemp2.filter((e) => e.NAME_PROJECT === nameProject);
+        }
         //Set data cho bảng
-        setData(filterTemp2);
-    }, [task, fromDate, nameFilter, state, toDate]);
+        setData(filterTemp3);
+    }, [task, fromDate, nameFilter, state, toDate, project, projects]);
 
     const handleFromDate = (newDate) => {
         setFromDate(newDate);
@@ -114,6 +126,9 @@ function TaskTable() {
     };
     const handleSelectState = (event) => {
         setState(event.target.value);
+    };
+    const handleSelectProject = (event) => {
+        setProject(event.target.value);
     };
 
     const handleRequestSort = (event, property) => {
@@ -205,6 +220,24 @@ function TaskTable() {
                         <MenuItem value="all">Tất cả</MenuItem>
                         <MenuItem value="completed">Hoàn thành</MenuItem>
                         <MenuItem value="incomplete">Chưa hoàn thành</MenuItem>
+                    </Select>
+                </FormControl>
+                <FormControl sx={{ minWidth: 150, ml: '5px', height: '36.5px' }} size="small">
+                    <InputLabel id="select-project">Dự án</InputLabel>
+                    <Select
+                        labelId="select-project"
+                        id="select-project"
+                        value={project}
+                        label="Dự án"
+                        autoWidth
+                        onChange={handleSelectProject}
+                    >
+                        <MenuItem value="-1">Tất cả</MenuItem>
+                        {projects.map((item, index) => (
+                            <MenuItem key={index} value={item.ID}>
+                                {item.NAME_PROJECT}
+                            </MenuItem>
+                        ))}
                     </Select>
                 </FormControl>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>

@@ -24,6 +24,7 @@ import levelApi from '~/api/Levels/levelApi';
 import worksApi from '~/api/Works/worksApi';
 import userApi from '~/api/Users/useApi';
 import typeApi from '~/api/Types/typeApi';
+import projectApi from '~/api/Projects/projectApi';
 import { SUCCESS, ERROR } from '~/components/CustomAlert/constants';
 // import { convert } from '../share';
 
@@ -36,6 +37,7 @@ function AddWorkForm(props) {
     const cUserId = props.data?.USER_ID ? props.data?.USER_ID : userId;
     const cWorkReceiveId = props.data?.WORK_RECEIVE_ID ? props.data?.WORK_RECEIVE_ID : null;
     const cWorkId = props.data?.WORK_ID ? props.data?.WORK_ID : null;
+    const cProjectId = props.data?.PROJECT_ID ? props.data?.PROJECT_ID : '';
 
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState('');
@@ -47,7 +49,11 @@ function AddWorkForm(props) {
     const [received, setReceived] = React.useState([]);
     const [users, setUsers] = React.useState([]);
     const [types, setTypes] = React.useState([]);
+    const [projects, setProjects] = React.useState([]);
+    const [project, setProject] = React.useState(cProjectId);
+    const [goal, setGoal] = React.useState('');
 
+    //Lấy dữ liệu cho select box
     React.useEffect(() => {
         async function fetchMyAPI() {
             try {
@@ -57,6 +63,8 @@ function AddWorkForm(props) {
                 setLevels(res_level.data);
                 const res_user = await userApi.getAll();
                 setUsers(res_user.data);
+                const res_project = await projectApi.getAll();
+                setProjects(res_project.data);
             } catch (error) {
                 console.log(error.message);
             }
@@ -80,7 +88,10 @@ function AddWorkForm(props) {
         setName('');
         setLevel('');
         setNote('');
-        setLevels([]);
+        // setLevels([]);
+        // setProjects([]);
+        setProject('');
+        setGoal('');
         setBeginDate(new Date());
         setEndDate(new Date());
     };
@@ -102,6 +113,8 @@ function AddWorkForm(props) {
             UPDATED_AT: new Date(),
             WORK_RECEIVE_ID: cWorkReceiveId,
             WORK_ID: cWorkId,
+            PROJECT_ID: project,
+            WORK_GOALS: goal,
             WORK_RECEIVES: received,
         };
         console.log(data);
@@ -176,14 +189,26 @@ function AddWorkForm(props) {
                                         size="small"
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <SelectAutoWidth
-                                        data={levels}
-                                        onChange={setLevel}
-                                        selected={level}
-                                        contentKey="NAME_WORK_LEVELS"
-                                        label="Chọn loại công việc"
-                                    />
+                                <Grid item container xs={12}>
+                                    <Grid item xs={5.7}>
+                                        <SelectAutoWidth
+                                            data={levels}
+                                            onChange={setLevel}
+                                            selected={level}
+                                            contentKey="NAME_WORK_LEVELS"
+                                            label="Chọn loại công việc"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={5.7}>
+                                        <SelectAutoWidth
+                                            disabled={props.data?.PROJECT_ID ? true : false}
+                                            data={projects}
+                                            onChange={setProject}
+                                            selected={project}
+                                            contentKey="NAME_PROJECT"
+                                            label="Chọn dự án"
+                                        />
+                                    </Grid>
                                 </Grid>
                                 <Grid container direction="row">
                                     <Grid item xs={5.7}>
@@ -214,21 +239,35 @@ function AddWorkForm(props) {
                                     </Grid>
                                 </Grid>
                             </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    fullWidth
-                                    multiline
-                                    value={note}
-                                    maxRows={7.2}
-                                    minRows={7.2}
-                                    label="Nội dung công việc"
-                                    onChange={(e) => setNote(e.target.value)}
-                                    size="small"
-                                />
+                            <Grid item container xs={6}>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        multiline
+                                        value={note}
+                                        maxRows={2.5}
+                                        minRows={2.5}
+                                        label="Nội dung công việc"
+                                        onChange={(e) => setNote(e.target.value)}
+                                        size="small"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        multiline
+                                        value={goal}
+                                        maxRows={2.5}
+                                        minRows={2.5}
+                                        label="Mục tiêu công việc"
+                                        onChange={(e) => setGoal(e.target.value)}
+                                        size="small"
+                                    />
+                                </Grid>
                             </Grid>
                             <Grid item xs={12} sx={{ height: '340px', m: 2 }}>
                                 <AddReceiveWork
-                                    data={{ users, types, note, beginDate, endDate }}
+                                    data={{ users, types, note, beginDate, endDate, project, goal }}
                                     onSelected={setReceived}
                                 />
                             </Grid>

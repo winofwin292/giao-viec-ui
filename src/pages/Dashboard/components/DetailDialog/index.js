@@ -132,12 +132,13 @@ function DetailDialog(props) {
                             <TableRow>
                                 <TableCell>STT</TableCell>
                                 <TableCell>Tên người nhận</TableCell>
-                                <TableCell align="right">Kiểu công việc</TableCell>
-                                <TableCell align="right">Nội dung</TableCell>
-                                <TableCell align="right">Ngày bắt đầu</TableCell>
-                                <TableCell align="right">Ngày kết thúc</TableCell>
-                                <TableCell align="right">Tổng thời gian</TableCell>
-                                <TableCell align="right">Trạng thái</TableCell>
+                                <TableCell>Kiểu công việc</TableCell>
+                                <TableCell>Nội dung</TableCell>
+                                <TableCell>Mục tiêu</TableCell>
+                                <TableCell>Ngày bắt đầu</TableCell>
+                                <TableCell>Ngày kết thúc</TableCell>
+                                <TableCell>Tổng thời gian</TableCell>
+                                <TableCell>Trạng thái</TableCell>
                                 <TableCell align="center" colSpan={3}>
                                     Công cụ
                                 </TableCell>
@@ -150,12 +151,13 @@ function DetailDialog(props) {
                                         {index + 1}
                                     </TableCell>
                                     <TableCell>{childRow.NAME_RECEIVERS}</TableCell>
-                                    <TableCell align="right">{childRow.NAME_WORK_TYPES}</TableCell>
-                                    <TableCell align="right">{childRow.COMMENT_WORK_RECEIVE}</TableCell>
-                                    <TableCell align="right">{convert(childRow.BEGIN_DATE_AT)}</TableCell>
-                                    <TableCell align="right">{convert(childRow.END_DATE_AT)}</TableCell>
-                                    <TableCell align="right">{childRow.TOTAL_TIME}</TableCell>
-                                    <TableCell align="right">{childRow.STATUS}</TableCell>
+                                    <TableCell>{childRow.NAME_WORK_TYPES}</TableCell>
+                                    <TableCell>{childRow.COMMENT_WORK_RECEIVE}</TableCell>
+                                    <TableCell>{childRow.WORK_RECEIVE_GOALS}</TableCell>
+                                    <TableCell>{convert(childRow.BEGIN_DATE_AT)}</TableCell>
+                                    <TableCell>{convert(childRow.END_DATE_AT)}</TableCell>
+                                    <TableCell>{childRow.TOTAL_TIME}</TableCell>
+                                    <TableCell>{childRow.STATUS}</TableCell>
                                     <TableCell>
                                         <ChangeStatus
                                             setRefresh={setRefresh}
@@ -198,6 +200,7 @@ function DetailDialog(props) {
                                                 WORK_RECEIVE_ID: childRow.ID,
                                                 USER_ID: childRow.USER_ID,
                                                 END_DATE_AT: childRow.END_DATE_AT,
+                                                PROJECT_ID: childRow.PROJECT_ID,
                                             }}
                                         />
                                     </TableCell>

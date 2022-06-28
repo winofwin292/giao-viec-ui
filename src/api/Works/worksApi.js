@@ -21,6 +21,14 @@ const worksApi = {
         const url = '/works/update_work_status';
         return axiosClient.post(url, data);
     },
+    getProjectByUserId(data) {
+        const url = 'works/project_by_userid';
+        return axiosClient.post(url, data);
+    },
+    getWorkByProjectId(data) {
+        const url = 'works/work_by_projectid';
+        return axiosClient.post(url, data);
+    },
 };
 
 export default worksApi;

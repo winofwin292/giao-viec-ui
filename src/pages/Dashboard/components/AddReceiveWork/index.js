@@ -8,6 +8,8 @@ function AddReceiveWork(props) {
     const note = props.data.note;
     const beginDate = props.data.beginDate;
     const endDate = props.data.endDate;
+    const project = props.data.project;
+    const goal = props.data.goal;
     const header = HeaderTable(types);
 
     data.forEach((element) => {
@@ -15,6 +17,8 @@ function AddReceiveWork(props) {
         element.COMMENT_WORK_RECEIVE = note;
         element.BEGIN_DATE_AT = beginDate;
         element.END_DATE_AT = endDate;
+        element.PROJECT_ID = project;
+        element.WORK_RECEIVE_GOALS = goal;
     });
 
     const handleRowEditCommit = (params, e) => {

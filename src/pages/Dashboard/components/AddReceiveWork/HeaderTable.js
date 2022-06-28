@@ -25,7 +25,8 @@ function HeaderTable(workTypes) {
                 return option.label;
             },
         },
-        { field: 'COMMENT_WORK_RECEIVE', headerName: 'Nội dung', width: 470, editable: true },
+        { field: 'COMMENT_WORK_RECEIVE', headerName: 'Nội dung', width: 300, editable: true },
+        { field: 'WORK_RECEIVE_GOALS', headerName: 'Mục tiêu', width: 300, editable: true },
         { field: 'BEGIN_DATE_AT', headerName: 'Ngày bắt đầu', width: 150, editable: true, type: 'date' },
         { field: 'END_DATE_AT', headerName: 'Ngày kết thúc', width: 150, editable: true, type: 'date' },
     ];

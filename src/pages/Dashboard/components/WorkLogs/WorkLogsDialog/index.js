@@ -9,7 +9,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 // import { useSelector } from 'react-redux';
 import WorkLogsTable from '../WorkLogsTable';
 import workLogsApi from '~/api/WorkLogs/workLogsApi';
-import projectApi from '~/api/Projects/projectApi';
+// import projectApi from '~/api/Projects/projectApi';
 import worksApi from '~/api/Works/worksApi';
 import { SUCCESS, ERROR } from '~/components/CustomAlert/constants';
 import CustomAlert from '~/components/CustomAlert';
@@ -28,7 +28,7 @@ function WorkLogsDialog(props) {
     //variable lọc
     var date = new Date();
     var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0, 22, 59, 59);
     const [fromDate, setFromDate] = React.useState(firstDay);
     const [toDate, setToDate] = React.useState(lastDay);
     const [works, setWorks] = React.useState([]);
@@ -179,7 +179,10 @@ function WorkLogsDialog(props) {
     //Lưu log
     const handleSave = async () => {
         // console.log(logs);
-        const res = await workLogsApi.addLogs(data);
+        //lọc các dòng có ID rỗng để gởi về sv
+        const newRows = data.filter((e) => e.ID === null);
+        // console.log(newRows);
+        const res = await workLogsApi.addLogs(newRows);
         // console.log(res);
         if (res.status === 200) {
             props.setNotify({

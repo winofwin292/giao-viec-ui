@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -8,6 +9,7 @@ import StorageKeys from '~/constants/storage-keys';
 import jwt_decode from 'jwt-decode';
 
 function App() {
+    const [isLogin, setIsLogin] = React.useState(false);
     const loginInUser = useSelector((state) => state.user.current.id);
     const isLoggedIn = !!loginInUser;
     let expired = true;
@@ -23,10 +25,17 @@ function App() {
         }
     }
 
+    React.useEffect(() => {
+        if (!(!isLoggedIn || expired)) {
+            setIsLogin(true);
+        }
+    }, [expired, isLoggedIn, isLogin]);
+
     // console.log(!isLoggedIn || expired);
-    if (!isLoggedIn || expired) {
+    if (!isLogin) {
         return <Login />;
     }
+
     return (
         <Router>
             <div className="App">

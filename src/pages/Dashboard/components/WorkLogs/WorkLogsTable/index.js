@@ -60,6 +60,7 @@ function WorkLogsTable(props) {
                 ],
             },
         ],
+        //2 hàm sự kiện
         [deleteRows, duplicateUser],
     );
 
@@ -70,7 +71,13 @@ function WorkLogsTable(props) {
             pageSize={12}
             rowsPerPageOptions={[12]}
             getRowId={(row) => row.STT}
+            isCellEditable={(params) => params.row.ID === null}
             rowHeight={30}
+            initialState={{
+                sorting: {
+                    sortModel: [{ field: 'BEGIN_DATE_AT', sort: 'desc' }],
+                },
+            }}
             onCellEditCommit={handleRowEditCommit}
         />
     );

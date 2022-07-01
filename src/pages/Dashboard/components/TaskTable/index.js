@@ -35,7 +35,7 @@ function TaskTable() {
     const nameFilter = useSelector((state) => state.user.current.user.NAME_USERS);
     var date = new Date();
     var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0, 22, 59, 59);
     const [fromDate, setFromDate] = React.useState(firstDay);
     const [toDate, setToDate] = React.useState(lastDay);
     const [state, setState] = React.useState('all');

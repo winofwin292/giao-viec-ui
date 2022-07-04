@@ -27,7 +27,9 @@ function WorkLogsDialog(props) {
 
     //variable lọc
     var date = new Date();
-    var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+
+    var firstDay = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+
     var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0, 22, 59, 59);
     const [fromDate, setFromDate] = React.useState(firstDay);
     const [toDate, setToDate] = React.useState(lastDay);

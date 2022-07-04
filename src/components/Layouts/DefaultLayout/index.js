@@ -17,9 +17,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import LogoutIcon from '@mui/icons-material/Logout';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { useDispatch } from 'react-redux';
+import { logout } from '~/pages/Login/userSlice';
 
 const drawerWidth = 240;
 
@@ -70,6 +71,7 @@ const mdTheme = createTheme();
 function DefaultLayout({ children }) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const dispatch = useDispatch();
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -77,6 +79,17 @@ function DefaultLayout({ children }) {
 
     const handleDrawerClose = () => {
         setOpen(false);
+    };
+
+    const handleLogout = async () => {
+        try {
+            const actions = logout();
+            await dispatch(actions);
+
+            window.location.reload();
+        } catch (error) {
+            console.log(error);
+        }
     };
     return (
         <ThemeProvider theme={mdTheme}>
@@ -123,14 +136,14 @@ function DefaultLayout({ children }) {
                     </DrawerHeader>
                     <Divider />
                     <List>
-                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
+                        <ListItem disablePadding>
+                            <ListItemButton onClick={handleLogout}>
+                                <ListItemIcon>
+                                    <LogoutIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Đăng xuất" />
+                            </ListItemButton>
+                        </ListItem>
                     </List>
                 </Drawer>
                 <Main open={open}>{children}</Main>

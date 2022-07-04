@@ -32,17 +32,15 @@ const userSlice = createSlice({
     name: 'user',
     initialState: {
         //khởi tạo giá trị mặc định cho redux
-        // current: JSON.parse(localStorage.getItem(StorageKeys.user)) || {},
         current: {},
         settings: {},
     },
     reducers: {
         logout(state) {
             //clear local storage
-            state.current = {};
+            // state.current = {};
+            localStorage.removeItem('persist:root');
             localStorage.removeItem(StorageKeys.access);
-            localStorage.removeItem(StorageKeys.refresh);
-            localStorage.removeItem(StorageKeys.user);
         },
     },
     extraReducers: {
@@ -51,9 +49,8 @@ const userSlice = createSlice({
         },
         [login.rejected]: (state, action) => {
             state.current = {};
+            localStorage.removeItem('persist:root');
             localStorage.removeItem(StorageKeys.access);
-            localStorage.removeItem(StorageKeys.refresh);
-            localStorage.removeItem(StorageKeys.user);
         },
     },
 });

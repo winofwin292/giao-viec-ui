@@ -36,14 +36,14 @@ function WorkLogsTable(props) {
     const columns = React.useMemo(
         () => [
             // { field: 'STT', headerName: 'STT', width: 70 },
-            { field: 'NAME_PROJECT', headerName: 'Tên dự án', width: 150 },
+            { field: 'NAME_PROJECT', headerName: 'Tên dự án', width: 130 },
             { field: 'NAME_WORKS', headerName: 'Tên công việc', width: 200 },
             { field: 'NAME_USERS', headerName: 'Người giao', width: 150 },
-            { field: 'TITLE', headerName: 'Tên', width: 200, editable: true },
+            { field: 'TITLE', headerName: 'Tên', width: 170, editable: true },
             { field: 'CONTENT', headerName: 'Nội dung', width: 350, editable: true },
-            { field: 'BEGIN_DATE_AT', headerName: 'Bắt đầu', width: 180, editable: true, type: 'dateTime' },
-            { field: 'END_DATE_AT', headerName: 'Kết thúc', width: 180, editable: true, type: 'dateTime' },
-            { field: 'TIME_WORK_LOGS', headerName: 'Thời gian', width: 100, editable: true, type: 'number' },
+            { field: 'BEGIN_DATE_AT', headerName: 'Bắt đầu', width: 150, editable: true, type: 'dateTime' },
+            { field: 'END_DATE_AT', headerName: 'Kết thúc', width: 150, editable: true, type: 'dateTime' },
+            { field: 'TIME_WORK_LOGS', headerName: 'Thời gian', width: 80, editable: true, type: 'number' },
             {
                 field: 'actions',
                 type: 'actions',

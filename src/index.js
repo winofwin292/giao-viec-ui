@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { PersistGate } from 'redux-persist/integration/react';
-import GlobalStyles from '~/components/GlobalStyles';
 import App from '~/App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
@@ -12,9 +11,7 @@ root.render(
     <React.StrictMode>
         <Provider store={store}>
             <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
-                <GlobalStyles>
-                    <App />
-                </GlobalStyles>
+                <App />
             </PersistGate>
         </Provider>
     </React.StrictMode>,

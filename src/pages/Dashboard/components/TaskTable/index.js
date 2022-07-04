@@ -8,7 +8,6 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { useSelector } from 'react-redux';
 import HeaderTaskTable from './HeaderTaskTable';
 import { getComparator, stableSort } from './sortTaskTable';
-// import ToolbarTaskTable from './ToolbarTaskTable';
 import RowTaskTable from './RowTaskTable';
 import worksApi from '~/api/Works/worksApi';
 import projectApi from '~/api/Projects/projectApi';
@@ -30,8 +29,11 @@ function TaskTable() {
 
     const [task, setTask] = React.useState('all');
     const nameFilter = useSelector((state) => state.user.current.user.NAME_USERS);
+
     var date = new Date();
-    var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+
+    var firstDay = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+
     var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0, 22, 59, 59);
     const [fromDate, setFromDate] = React.useState(firstDay);
     const [toDate, setToDate] = React.useState(lastDay);

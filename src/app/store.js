@@ -4,7 +4,7 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 //Cấu hình cho Redux Persist
-//Tự động kiểm tra trạng thải của redux khi truy cập
+//Tự động kiểm tra trạng thái của redux khi truy cập
 const persistConfig = {
     key: 'root',
     storage,

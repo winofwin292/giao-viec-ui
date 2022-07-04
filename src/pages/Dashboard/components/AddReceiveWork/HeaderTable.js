@@ -1,4 +1,6 @@
 function HeaderTable(workTypes) {
+    //Thay đổi key cho work type để hiển thị trong
+    //select box của data grid
     const newTypes = [];
 
     workTypes.forEach((element) => {
@@ -8,6 +10,7 @@ function HeaderTable(workTypes) {
         newTypes.push(newElement);
     });
 
+    //Header cho data grid
     const headerName = [
         { field: 'ID', headerName: 'ID', width: 70 },
         { field: 'NAME_USERS', headerName: 'Tên', width: 200 },

@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function SelectAutoWidth(props) {
+function SelectAutoWidth(props) {
     const handleChange = (event) => {
         props.onChange(event.target.value);
     };
@@ -34,3 +34,5 @@ export default function SelectAutoWidth(props) {
         </FormControl>
     );
 }
+
+export default SelectAutoWidth;

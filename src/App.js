@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { publicRoutes } from '~/routes';
+import { configRoutes } from '~/routes';
 import { DefaultLayout } from '~/components/Layouts';
 import Login from '~/pages/Login';
 import StorageKeys from '~/constants/storage-keys';
@@ -31,7 +31,6 @@ function App() {
         }
     }, [expired, isLoggedIn, isLogin]);
 
-    // console.log(!isLoggedIn || expired);
     if (!isLogin) {
         return <Login />;
     }
@@ -40,12 +39,13 @@ function App() {
         <Router>
             <div className="App">
                 <Routes>
-                    {publicRoutes.map((route, index) => {
+                    {configRoutes.map((route, index) => {
                         //Xử lí nếu có layout được truyền vào
                         const Page = route.component;
                         let Layout = DefaultLayout;
                         if (route.layout) Layout = route.layout;
                         else if (route.layout === null) Layout = Fragment;
+
                         return (
                             <Route
                                 key={index}

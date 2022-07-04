@@ -12,7 +12,6 @@ function CustomAlert(props) {
         if (reason === 'clickaway') {
             return;
         }
-        // setOpen(false);
         props.onClose({
             open: false,
             type: props.data.type,

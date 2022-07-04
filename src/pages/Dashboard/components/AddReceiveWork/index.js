@@ -12,6 +12,8 @@ function AddReceiveWork(props) {
     const goal = props.data.goal;
     const header = HeaderTable(types);
 
+    //Thêm các giá trị để hiển thị lên data grid, các giá trị này được
+    //truyền thông qua biến khỏi tạo bởi useState ở component cha (AddWorkForm)
     data.forEach((element) => {
         element.WORK_TYPE_ID = 1;
         element.COMMENT_WORK_RECEIVE = note;
@@ -21,6 +23,7 @@ function AddReceiveWork(props) {
         element.WORK_RECEIVE_GOALS = goal;
     });
 
+    //Xử lí khi chỉnh sửa ô dữ liệu trong data grid
     const handleRowEditCommit = (params, e) => {
         data.forEach((r) => {
             if (r.ID === params.id) {
@@ -29,6 +32,7 @@ function AddReceiveWork(props) {
         });
     };
 
+    //Xử lí khi chọn người nhận việc
     const handleSelected = (ids) => {
         const selectedIDs = new Set(ids);
         const selectedRowData = data.filter((row) => selectedIDs.has(row.ID));

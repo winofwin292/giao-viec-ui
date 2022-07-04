@@ -28,6 +28,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     },
 }));
 
+//Tiêu đề của dialog
 const BootstrapDialogTitle = (props) => {
     const { children, onClose, ...other } = props;
 
@@ -66,12 +67,14 @@ function EditWorkReceived(props) {
     const [endDate, setEndDate] = React.useState(new Date(oldData.END_DATE_AT));
     const [users, setUsers] = React.useState([]);
 
+    //Lấy danh sách user
     const handleClickOpen = async () => {
         setOpen(true);
         const res_user = await userApi.getAll();
         setUsers(res_user.data);
         setUserID(oldData.USER_ID);
     };
+
     const handleClose = () => {
         setUsers([]);
         setUserID('');
@@ -79,6 +82,7 @@ function EditWorkReceived(props) {
         setEndDate(new Date());
         setOpen(false);
     };
+
     const handlePickBeginDate = (newDate) => {
         setBeginDate(newDate);
     };
@@ -86,6 +90,7 @@ function EditWorkReceived(props) {
         setEndDate(newDate);
     };
 
+    //Xử lí khi lưu cập nhật
     const handleSubmit = async () => {
         const newObj = {
             ID: oldData.ID,
@@ -96,6 +101,8 @@ function EditWorkReceived(props) {
         };
 
         const res = await workReceivesApi.update(newObj);
+
+        //Hiển thị thông báo
         if (res.status === 200) {
             props.setNotify({
                 open: true,

@@ -57,12 +57,16 @@ function AddWorkForm(props) {
     React.useEffect(() => {
         async function fetchMyAPI() {
             try {
+                //Loại nhận công việc
                 const res_type = await typeApi.getAll();
                 setTypes(res_type.data);
+                //Loại công việc
                 const res_level = await levelApi.getAll();
                 setLevels(res_level.data);
+                //Danh sách người dùng
                 const res_user = await userApi.getAll();
                 setUsers(res_user.data);
+                //Danh sách dự án
                 const res_project = await projectApi.getAll();
                 setProjects(res_project.data);
             } catch (error) {
@@ -101,6 +105,7 @@ function AddWorkForm(props) {
         setOpen(false);
     };
 
+    //Xử lí khi thêm công việc mới
     const handleSave = async () => {
         const data = {
             USER_ID: cUserId,
@@ -117,9 +122,12 @@ function AddWorkForm(props) {
             WORK_GOALS: goal,
             WORK_RECEIVES: received,
         };
-        console.log(data);
+
+        // console.log(data);
         const res = await worksApi.createWork(data);
-        console.log(res);
+        // console.log(res);
+
+        //Hiển thị thông báo
         if (res.status === 200) {
             props.setNotify({
                 open: true,
@@ -134,6 +142,7 @@ function AddWorkForm(props) {
             });
         }
 
+        //Làm trống các input đã nhập
         clearInput();
         setOpen(false);
         //Làm mới dữ liệu

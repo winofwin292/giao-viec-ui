@@ -2,8 +2,6 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -25,23 +23,6 @@ function ChildRow(props) {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('STT');
     const [selected, setSelected] = React.useState([]);
-    const [contextMenu, setContextMenu] = React.useState(null);
-
-    const handleContextMenu = (event) => {
-        event.preventDefault();
-        setContextMenu(
-            contextMenu === null
-                ? {
-                      mouseX: event.clientX + 2,
-                      mouseY: event.clientY - 6,
-                  }
-                : null,
-        );
-    };
-
-    const handleClose = () => {
-        setContextMenu(null);
-    };
 
     const handleOpen = async (event, id) => {
         event.preventDefault();
@@ -50,13 +31,10 @@ function ChildRow(props) {
             WORK_ID: id,
         };
         if (open === false) {
-            console.log('show');
             const res = await worksApi.getChild(data_req);
             // console.log(res);
             setChildData(res.data);
         } else {
-            console.log('end show');
-
             setChildData([]);
         }
     };
@@ -100,7 +78,6 @@ function ChildRow(props) {
                     selected={props.isItemSelected}
                     sx={{ '& > *': { borderBottom: 'unset' } }}
                     // onClick={(event) => handleOpen(event)}
-                    onContextMenu={handleContextMenu}
                 >
                     <TableCell component="th" id={props.labelId} scope="row" sx={{ padding: '5px' }} align="right">
                         {data.STT}
@@ -199,19 +176,6 @@ function ChildRow(props) {
                         {/* End childTable */}
                     </TableCell>
                 </TableRow>
-                <Menu
-                    open={contextMenu !== null}
-                    onClose={handleClose}
-                    anchorReference="anchorPosition"
-                    anchorPosition={
-                        contextMenu !== null ? { top: contextMenu.mouseY, left: contextMenu.mouseX } : undefined
-                    }
-                >
-                    <MenuItem onClick={handleClose}>Copy</MenuItem>
-                    <MenuItem onClick={handleClose}>Print</MenuItem>
-                    <MenuItem onClick={handleClose}>Highlight</MenuItem>
-                    <MenuItem onClick={handleClose}>Email</MenuItem>
-                </Menu>
             </React.Fragment>
         );
 }

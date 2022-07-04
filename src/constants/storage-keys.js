@@ -1,3 +1,4 @@
+//StorageKeys - Redux
 const StorageKeys = {
     user: 'user',
     access: 'access_token',

@@ -68,6 +68,7 @@ function DetailDialog(props) {
         msg: '',
     });
 
+    //Lấy thông tin nhận việc theo work id
     React.useEffect(() => {
         async function fetchMyAPI() {
             try {
@@ -87,6 +88,7 @@ function DetailDialog(props) {
         }
     }, [open, props.data.id]);
 
+    //Làm mới dữ liệu sau khi cập nhật
     React.useEffect(() => {
         async function fetchMyAPI() {
             try {
@@ -117,6 +119,7 @@ function DetailDialog(props) {
             </IconButton>
             <BootstrapDialog
                 fullWidth
+                //độ rộng cảu dialog
                 maxWidth="xl"
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"

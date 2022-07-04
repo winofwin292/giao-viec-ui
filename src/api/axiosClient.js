@@ -1,6 +1,7 @@
 import axios from 'axios';
 import StorageKeys from '~/constants/storage-keys';
 
+//Cấu hình chung cho axios
 const axiosClient = axios.create({
     baseURL: 'http://192.168.2.128:8081/',
     // baseURL: 'http://127.0.0.1:8081/',

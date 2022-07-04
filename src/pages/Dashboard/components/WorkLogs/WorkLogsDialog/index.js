@@ -88,8 +88,8 @@ function WorkLogsDialog(props) {
         getAllLogAPI();
     }, [refresh]);
 
+    //Lọc log theo id công việc
     React.useEffect(() => {
-        //lấy log theo id công việc
         let temp1 = [],
             temp2 = [],
             total;
@@ -202,6 +202,7 @@ function WorkLogsDialog(props) {
         // handleClose();
     };
 
+    //Lấy danh sách công việc theo project id và user id
     const handleChangeProject = (event) => {
         setProject(event.target.value);
         async function getWorksAPI() {
@@ -210,10 +211,9 @@ function WorkLogsDialog(props) {
                     PROJECT_ID: event.target.value,
                     USER_ID: userId,
                 };
-                const res_work1 = await worksApi.getWorkByProjectId(req);
-                // console.log(res_work1.data);
+                const res_work = await worksApi.getWorkByProjectId(req);
 
-                setWorks(res_work1.data);
+                setWorks(res_work.data);
                 //Đặt lại hiển thị công việc là tất cả
                 setWork(-1);
             } catch (error) {
@@ -229,12 +229,7 @@ function WorkLogsDialog(props) {
     return (
         <div style={{ marginLeft: '5px' }}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <Button
-                    variant="outlined"
-                    sx={{ height: '40px' }}
-                    onClick={handleClickOpen}
-                    // startIcon={<AddCircleIcon />}
-                >
+                <Button variant="outlined" sx={{ height: '40px' }} onClick={handleClickOpen}>
                     Demo Logs
                 </Button>
 
@@ -304,8 +299,6 @@ function WorkLogsDialog(props) {
                                                 onChange={handleChangeProject}
                                             >
                                                 <MenuItem value={-1}>Tất cả</MenuItem>
-                                                {/* <MenuItem value={7}>1</MenuItem>
-                                                <MenuItem value={8}>2</MenuItem> */}
                                                 {projects.map((element, index) => (
                                                     <MenuItem key={index} value={element.PROJECT_ID}>
                                                         {element.NAME_PROJECT}

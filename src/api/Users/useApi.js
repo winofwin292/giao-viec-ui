@@ -1,21 +1,25 @@
 import axiosClient from '../axiosClient';
 
 const userApi = {
+    //Đăng kí
     register(data) {
         const url = '/register';
         return axiosClient.post(url, data);
     },
+    //Đăng nhập
     login(data) {
         const url = '/login';
         return axiosClient.post(url, data);
     },
+
     getAll() {
         const url = '/users';
         return axiosClient.get(url);
     },
-    async getUser(data) {
+    //Lấy thông tin của user id được truyền vào
+    getUser(data) {
         const url = `users/id`;
-        return await axiosClient.post(url, data);
+        return axiosClient.post(url, data);
     },
 };
 

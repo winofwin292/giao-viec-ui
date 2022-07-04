@@ -17,6 +17,7 @@ import workReceivesApi from '~/api/WorkReceives/workReceivesApi';
 import worksApi from '~/api/Works/worksApi';
 import { SUCCESS, ERROR } from '~/components/CustomAlert/constants';
 
+//Các giá trị của trạng thái công việc
 const statusWork = [
     {
         value: 1,
@@ -40,6 +41,7 @@ function ChangeStatus(props) {
 
     const handleClickOpen = () => {
         setOpen(true);
+        //Đặt trạng thái công việc theo giá trị được truyền vào
         const objStatus = statusWork.find((element) => element.label === props.data.STATUS);
         setStatus(objStatus.value);
     };
@@ -48,6 +50,7 @@ function ChangeStatus(props) {
         setOpen(false);
     };
 
+    //Xử lý lưu trạng thái công việc mới
     const handleSave = async () => {
         let res = null;
         try {
@@ -55,12 +58,14 @@ function ChangeStatus(props) {
                 ID: props.data.ID,
                 STATUS: status,
             };
+            //Kiểm tra loại cập nhật để gưởi api (trạng thái công việc hoặc trạng thái nhận việc )
             if (props.table === 'receive') res = await workReceivesApi.updateStatus(dataReq);
             else if (props.table === 'work') res = await worksApi.updateStatus(dataReq);
         } catch (error) {
             console.log(error.message);
         }
 
+        //Hiển thị thông báo
         if (res.status === 200) {
             props.setNotify({
                 open: true,

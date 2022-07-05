@@ -62,24 +62,30 @@ function EditWorkReceived(props) {
     const oldData = props.data;
     const [open, setOpen] = React.useState(false);
     const [comment, setComment] = React.useState(oldData.COMMENT_WORK_RECEIVE);
+    const [goal, setGoal] = React.useState(oldData.WORK_RECEIVE_GOALS);
     const [userID, setUserID] = React.useState('');
     const [beginDate, setBeginDate] = React.useState(new Date(oldData.BEGIN_DATE_AT));
     const [endDate, setEndDate] = React.useState(new Date(oldData.END_DATE_AT));
     const [users, setUsers] = React.useState([]);
 
+    console.log(beginDate);
+
     //Lấy danh sách user
-    const handleClickOpen = async () => {
+    const handleClickOpen = async (event) => {
+        event.stopPropagation();
         setOpen(true);
         const res_user = await userApi.getAll();
         setUsers(res_user.data);
+
         setUserID(oldData.USER_ID);
+        setBeginDate(new Date(oldData.BEGIN_DATE_AT));
+        setEndDate(new Date(oldData.END_DATE_AT));
+        setGoal(oldData.WORK_RECEIVE_GOALS);
+        setComment(oldData.COMMENT_WORK_RECEIVE);
     };
 
-    const handleClose = () => {
-        setUsers([]);
-        setUserID('');
-        setBeginDate(new Date());
-        setEndDate(new Date());
+    const handleClose = (event) => {
+        event.stopPropagation();
         setOpen(false);
     };
 
@@ -91,11 +97,13 @@ function EditWorkReceived(props) {
     };
 
     //Xử lí khi lưu cập nhật
-    const handleSubmit = async () => {
+    const handleSubmit = async (event) => {
+        event.stopPropagation();
         const newObj = {
             ID: oldData.ID,
             USER_ID: userID,
             COMMENT_WORK_RECEIVE: comment,
+            WORK_RECEIVE_GOALS: goal,
             BEGIN_DATE_AT: beginDate,
             END_DATE_AT: endDate,
         };
@@ -116,9 +124,10 @@ function EditWorkReceived(props) {
                 msg: 'Lỗi: lỗi khi chỉnh sửa dữ liệu',
             });
         }
-        handleClose();
+
+        props.setRefresh(true);
+        handleClose(event);
         //Làm mới dữ liệu
-        props.setRefresh(!props.refresh);
     };
 
     return (
@@ -129,11 +138,11 @@ function EditWorkReceived(props) {
             <BootstrapDialog
                 fullWidth
                 maxWidth="lg"
-                onClose={handleClose}
+                onClose={(event) => handleClose(event)}
                 aria-labelledby="customized-dialog-title"
                 open={open}
             >
-                <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+                <BootstrapDialogTitle id="customized-dialog-title" onClose={(event) => handleClose(event)}>
                     Chỉnh sửa công việc
                 </BootstrapDialogTitle>
                 <Box
@@ -155,48 +164,67 @@ function EditWorkReceived(props) {
                                 label="Chọn người nhận việc"
                             />
                         </Grid>
+                        <Grid container item xs={6}>
+                            <Grid item xs={5.7}>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DesktopDatePicker
+                                        label="Ngày bắt đầu"
+                                        value={beginDate}
+                                        minDate={new Date(oldData.BEGIN_DATE_AT)}
+                                        maxDate={endDate}
+                                        onChange={handlePickBeginDate}
+                                        inputFormat="dd/MM/yyyy"
+                                        renderInput={(params) => <TextField size="small" {...params} />}
+                                        disableMaskedInput
+                                    />
+                                </LocalizationProvider>
+                            </Grid>
+                            <Grid item xs={5.7}>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DesktopDatePicker
+                                        label="Ngày kết thúc"
+                                        value={endDate}
+                                        minDate={beginDate}
+                                        maxDate={new Date(props.data.MAX_END_DATE_AT)}
+                                        onChange={handlePickEndDate}
+                                        inputFormat="dd/MM/yyyy"
+                                        renderInput={(params) => <TextField size="small" {...params} />}
+                                        disableMaskedInput
+                                    />
+                                </LocalizationProvider>
+                            </Grid>
+                        </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
                                 label="Nội dung công việc"
                                 value={comment}
                                 size="small"
-                                onChange={(e) => setComment(e.target.value)}
+                                multiline
+                                minRows={3}
+                                onChange={(e) => {
+                                    setComment(e.target.value);
+                                }}
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DesktopDatePicker
-                                    label="Ngày bắt đầu"
-                                    value={beginDate}
-                                    minDate={new Date(oldData.BEGIN_DATE_AT)}
-                                    maxDate={endDate}
-                                    onChange={handlePickBeginDate}
-                                    inputFormat="dd/MM/yyyy"
-                                    renderInput={(params) => <TextField size="small" {...params} />}
-                                    disableMaskedInput
-                                />
-                            </LocalizationProvider>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DesktopDatePicker
-                                    label="Ngày kết thúc"
-                                    value={endDate}
-                                    minDate={beginDate}
-                                    maxDate={new Date(props.data.MAX_END_DATE_AT)}
-                                    onChange={handlePickEndDate}
-                                    inputFormat="dd/MM/yyyy"
-                                    renderInput={(params) => <TextField size="small" {...params} />}
-                                    disableMaskedInput
-                                />
-                            </LocalizationProvider>
+                            <TextField
+                                fullWidth
+                                label="Mục tiêu công việc"
+                                value={goal}
+                                multiline
+                                minRows={3}
+                                size="small"
+                                onChange={(e) => {
+                                    setGoal(e.target.value);
+                                }}
+                            />
                         </Grid>
                         <Grid item xs={12} container justifyContent="flex-end">
                             <Button
                                 variant="outlined"
                                 sx={{ m: 2, right: 25 }}
-                                onClick={handleSubmit}
+                                onClick={(event) => handleSubmit(event)}
                                 endIcon={<CheckIcon />}
                             >
                                 Xác nhận

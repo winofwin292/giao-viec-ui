@@ -5,75 +5,64 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 export const headCells = [
     {
         id: 'STT',
-        numeric: true,
         label: 'STT',
-        minWidth: 40,
+        minWidth: 50,
     },
     {
         id: 'NAME_WORKS',
-        numeric: false,
         label: 'Tên công việc',
         minWidth: 150,
     },
     {
         id: 'NAME_PROJECT',
-        numeric: false,
         label: 'Dự án',
         minWidth: 150,
     },
     {
         id: 'NAME_USERS',
-        numeric: false,
         label: 'Người tạo',
         minWidth: 160,
     },
     {
         id: 'NAME_WORK_LEVELS',
-        numeric: false,
         label: 'Loại',
         minWidth: 170,
     },
     {
         id: 'NOTE',
-        numeric: false,
         label: 'Nội dung',
         minWidth: 200,
     },
     {
         id: 'WORK_GOALS',
-        numeric: false,
         label: 'Mục tiêu công việc',
         minWidth: 200,
     },
     {
         id: 'BEGIN_DATE_AT',
-        numeric: false,
         label: 'Bắt đầu',
-        minWidth: 120,
+        minWidth: 100,
     },
     {
         id: 'END_DATE_AT',
         numeric: false,
         label: 'Hết hạn',
-        minWidth: 120,
+        minWidth: 100,
     },
     {
         id: 'STATUS',
-        numeric: false,
         label: 'Trạng thái',
         minWidth: 110,
     },
     {
         id: 'NAME_RECEIVERS',
-        numeric: false,
         label: 'Người nhận',
         minWidth: 300,
     },
     {
         id: 'TOTAL_TIME',
-        numeric: false,
         label: 'Tổng thời gian',
-        minWidth: 120,
+        minWidth: 150,
     },
 ];
 

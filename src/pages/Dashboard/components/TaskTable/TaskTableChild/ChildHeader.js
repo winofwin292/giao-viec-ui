@@ -19,11 +19,10 @@ function ChildHeader(props) {
                 {headCells.map((headCell) => (
                     <StyledTableCell
                         key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
-                        // padding={headCell.disablePadding ? 'none' : 'normal'}
+                        align="left"
                         sortDirection={orderBy === headCell.id ? order : false}
                         style={{ minWidth: headCell.minWidth }}
-                        sx={{ padding: '5px', backgroundColor: '#01579b' }}
+                        sx={{ padding: '5px 0px 5px 5px', backgroundColor: '#2b68d7 !important' }}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
@@ -42,10 +41,10 @@ function ChildHeader(props) {
                 <StyledTableCell
                     colSpan={3}
                     align="center"
-                    style={{ minWidth: 20 }}
+                    style={{ minWidth: 80 }}
                     sx={{
-                        padding: '5px',
-                        backgroundColor: '#01579b',
+                        padding: '5px 0px 5px 5px',
+                        backgroundColor: '#2b68d7 !important',
                     }}
                 >
                     Công cụ

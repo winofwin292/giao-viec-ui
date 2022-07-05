@@ -39,19 +39,22 @@ function ChangeStatus(props) {
         setStatus(event.target.value);
     };
 
-    const handleClickOpen = () => {
+    const handleClickOpen = (event) => {
+        event.stopPropagation();
         setOpen(true);
         //Đặt trạng thái công việc theo giá trị được truyền vào
         const objStatus = statusWork.find((element) => element.label === props.data.STATUS);
         setStatus(objStatus.value);
     };
 
-    const handleClose = () => {
+    const handleClose = (event) => {
+        event.stopPropagation();
         setOpen(false);
     };
 
     //Xử lý lưu trạng thái công việc mới
-    const handleSave = async () => {
+    const handleSave = async (event) => {
+        event.stopPropagation();
         let res = null;
         try {
             const dataReq = {
@@ -80,7 +83,7 @@ function ChangeStatus(props) {
             });
         }
         //Làm mới dữ liệu
-        props.setRefresh(!props.refresh);
+        props.setRefresh(true);
         setOpen(false);
     };
     return (
@@ -88,7 +91,7 @@ function ChangeStatus(props) {
             <IconButton
                 aria-label="expand row"
                 size="small"
-                onClick={handleClickOpen}
+                onClick={(event) => handleClickOpen(event)}
                 disabled={!(props.data.USER_ID === loginInUser.id)}
             >
                 <AssignmentTurnedInIcon />
@@ -103,7 +106,7 @@ function ChangeStatus(props) {
                             labelId="work-receive-state"
                             id="work-receive-state"
                             value={status}
-                            onChange={handleChange}
+                            onChange={(event) => handleChange(event)}
                             autoWidth
                             label="Trạng thái công việc"
                         >
@@ -116,8 +119,8 @@ function ChangeStatus(props) {
                     </FormControl>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Hủy bỏ</Button>
-                    <Button onClick={handleSave}>Lưu</Button>
+                    <Button onClick={(event) => handleClose(event)}>Hủy bỏ</Button>
+                    <Button onClick={(event) => handleSave(event)}>Lưu</Button>
                 </DialogActions>
             </Dialog>
         </div>

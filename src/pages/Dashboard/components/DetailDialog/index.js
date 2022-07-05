@@ -101,31 +101,36 @@ function DetailDialog(props) {
                 console.log(error.message);
             }
         }
-        fetchMyAPI();
+        if (refresh) {
+            fetchMyAPI();
+            setRefresh(false);
+        }
     }, [props.data.id, refresh]);
 
-    const handleClickOpen = async () => {
+    const handleClickOpen = (event) => {
+        event.stopPropagation();
         setOpen(true);
     };
-    const handleClose = () => {
+    const handleClose = (event) => {
+        event.stopPropagation();
         setOpen(false);
         setChildData([]);
     };
 
     return (
         <div>
-            <IconButton aria-label="expand row" size="small" onClick={(e) => handleClickOpen(e)}>
+            <IconButton aria-label="expand row" size="small" onClick={(event) => handleClickOpen(event)}>
                 <InfoIcon />
             </IconButton>
             <BootstrapDialog
                 fullWidth
-                //độ rộng cảu dialog
+                //độ rộng của dialog
                 maxWidth="xl"
-                onClose={handleClose}
+                onClose={(event) => handleClose(event)}
                 aria-labelledby="customized-dialog-title"
                 open={open}
             >
-                <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+                <BootstrapDialogTitle id="customized-dialog-title" onClose={(event) => handleClose(event)}>
                     Chi tiết giao việc
                 </BootstrapDialogTitle>
                 <Box sx={{ margin: 1, marginBottom: 4 }}>
@@ -187,7 +192,7 @@ function DetailDialog(props) {
                                                 COMMENT_WORK_RECEIVE: childRow.COMMENT_WORK_RECEIVE,
                                                 BEGIN_DATE_AT: childRow.BEGIN_DATE_AT,
                                                 END_DATE_AT: childRow.END_DATE_AT,
-
+                                                WORK_RECEIVE_GOALS: childRow.WORK_RECEIVE_GOALS,
                                                 MAX_END_DATE_AT: props.data.END_DATE_AT,
                                             }}
                                         />

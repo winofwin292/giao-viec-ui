@@ -2,13 +2,12 @@ import PropTypes from 'prop-types';
 import TableHead from '@mui/material/TableHead';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import TableRow from '@mui/material/TableRow';
-import Checkbox from '@mui/material/Checkbox';
 import { visuallyHidden } from '@mui/utils';
 import Box from '@mui/material/Box';
 import { headCells, StyledTableCell } from '~/pages/Dashboard/components/share';
 
 function HeaderTaskTable(props) {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+    const { order, orderBy, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -16,25 +15,14 @@ function HeaderTaskTable(props) {
     return (
         <TableHead>
             <TableRow>
-                <StyledTableCell padding="checkbox" sx={{ backgroundColor: '#03a9f4' }}>
-                    <Checkbox
-                        color="primary"
-                        indeterminate={numSelected > 0 && numSelected < rowCount}
-                        checked={rowCount > 0 && numSelected === rowCount}
-                        onChange={onSelectAllClick}
-                        inputProps={{
-                            'aria-label': 'select all desserts',
-                        }}
-                    />
-                </StyledTableCell>
                 {headCells.map((headCell) => (
                     <StyledTableCell
                         key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
+                        align="left"
                         sortDirection={orderBy === headCell.id ? order : false}
                         style={{ minWidth: headCell.minWidth }}
                         sx={{
-                            padding: '5px',
+                            padding: '5px 0px 5px 5px',
                         }}
                     >
                         <TableSortLabel
@@ -54,9 +42,9 @@ function HeaderTaskTable(props) {
                 <StyledTableCell
                     colSpan={3}
                     align="center"
-                    style={{ minWidth: 20 }}
+                    style={{ minWidth: 80 }}
                     sx={{
-                        padding: '5px',
+                        padding: '5px 0px 5px 5px',
                     }}
                 >
                     Công cụ
@@ -67,12 +55,9 @@ function HeaderTaskTable(props) {
 }
 
 HeaderTaskTable.propTypes = {
-    numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
     order: PropTypes.oneOf(['asc', 'desc']).isRequired,
     orderBy: PropTypes.string.isRequired,
-    rowCount: PropTypes.number.isRequired,
 };
 
 export default HeaderTaskTable;

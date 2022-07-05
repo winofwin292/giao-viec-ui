@@ -32,6 +32,7 @@ function Login() {
         try {
             const actions = login(data);
             await dispatch(actions);
+            window.location.reload();
         } catch (error) {
             console.log(error);
         }

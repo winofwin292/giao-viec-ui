@@ -39,7 +39,7 @@ function WorkLogsTable(props) {
             { field: 'NAME_PROJECT', headerName: 'Tên dự án', width: 130 },
             { field: 'NAME_WORKS', headerName: 'Tên công việc', width: 200 },
             { field: 'NAME_USERS', headerName: 'Người giao', width: 150 },
-            { field: 'TITLE', headerName: 'Tên', width: 170, editable: true },
+            { field: 'TITLE', headerName: 'Tiêu đề', width: 170, editable: true },
             { field: 'CONTENT', headerName: 'Nội dung', width: 350, editable: true },
             { field: 'BEGIN_DATE_AT', headerName: 'Bắt đầu', width: 150, editable: true, type: 'dateTime' },
             { field: 'END_DATE_AT', headerName: 'Kết thúc', width: 150, editable: true, type: 'dateTime' },
@@ -68,8 +68,8 @@ function WorkLogsTable(props) {
         <DataGrid
             rows={props.data.logs}
             columns={columns}
-            pageSize={12}
-            rowsPerPageOptions={[12]}
+            pageSize={11}
+            rowsPerPageOptions={[11]}
             getRowId={(row) => row.STT}
             isCellEditable={(params) => params.row.ID === null}
             rowHeight={30}

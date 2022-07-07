@@ -120,6 +120,7 @@ function RowTaskTable(props) {
                         data={{
                             id: data.ID,
                             END_DATE_AT: data.END_DATE_AT,
+                            USER_ID: data.USER_ID,
                         }}
                     />
                 </TableCell>

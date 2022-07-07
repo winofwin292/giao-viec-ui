@@ -1,4 +1,7 @@
 import * as React from 'react';
+import Button from '@mui/material/Button';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import GetAppIcon from '@mui/icons-material/GetApp';
 import { Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from '@mui/material';
 import { Box, Paper, MenuItem } from '@mui/material';
 import { FormControl, Select, InputLabel, TextField } from '@mui/material';
@@ -16,6 +19,7 @@ import { SUCCESS } from '~/components/CustomAlert/constants';
 import CustomAlert from '~/components/CustomAlert';
 import WorkLogsDialog from '../WorkLogs/WorkLogsDialog';
 import ReadXLSX from '../ReadXLSX';
+import * as XLSX from 'xlsx';
 
 function TaskTable() {
     const [order, setOrder] = React.useState('asc');
@@ -144,6 +148,34 @@ function TaskTable() {
         setPage(0);
     };
 
+    //Xuất file excel
+    const handleExportXLSX = () => {
+        //Chỉnh sửa lại tên file (thực hiện sau)
+        const filename = 'reports.xlsx';
+
+        const exportData = data.map((element, index) => {
+            return {
+                STT: index + 1,
+                'Tên công việc': element.NAME_WORKS,
+                'Tên dự án': element.NAME_PROJECT,
+                'Người tạo': element.NAME_USERS,
+                'Loại công việc': element.NAME_WORK_LEVELS,
+                'Nội dung': element.NOTE,
+                'Mục tiêu': element.WORK_GOALS,
+                'Bắt đầu': new Date(element.BEGIN_DATE_AT),
+                'Kết thúc': new Date(element.END_DATE_AT),
+                'Trạng thái': element.STATUS,
+                'Người nhận': element.NAME_RECEIVERS,
+                'Tổng thời gian thực hiện': element.TOTAL_TIME,
+            };
+        });
+
+        var ws = XLSX.utils.json_to_sheet(exportData, { dateNF: 'dd/MM/yyyy' });
+        var wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Danh sách công việc');
+        XLSX.writeFile(wb, filename);
+    };
+
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
@@ -159,8 +191,17 @@ function TaskTable() {
                     display: 'flex',
                 }}
             >
+                <Button
+                    variant="outlined"
+                    sx={{ ml: '5px', mr: '5px' }}
+                    startIcon={<RefreshIcon />}
+                    onClick={(e) => setRefresh(!refresh)}
+                >
+                    Làm mới
+                </Button>
+
                 <AddWorkForm setNotify={setNotify} setRefresh={setRefresh} refresh={refresh} sx={{ padding: '10px' }} />
-                <FormControl sx={{ minWidth: 150, ml: '5px', height: '36.5px' }} size="small">
+                <FormControl sx={{ minWidth: 150, ml: '5px' }} size="small">
                     <InputLabel id="select-task">Hiển thị</InputLabel>
                     <Select
                         labelId="select-task"
@@ -175,7 +216,7 @@ function TaskTable() {
                         <MenuItem value="received">Đã nhận</MenuItem>
                     </Select>
                 </FormControl>
-                <FormControl sx={{ minWidth: 150, ml: '5px', height: '36.5px' }} size="small">
+                <FormControl sx={{ minWidth: 150, ml: '5px' }} size="small">
                     <InputLabel id="select-state">Trạng thái</InputLabel>
                     <Select
                         labelId="select-state"
@@ -190,7 +231,7 @@ function TaskTable() {
                         <MenuItem value="incomplete">Chưa hoàn thành</MenuItem>
                     </Select>
                 </FormControl>
-                <FormControl sx={{ minWidth: 150, ml: '5px', height: '36.5px' }} size="small">
+                <FormControl sx={{ minWidth: 150, ml: '5px' }} size="small">
                     <InputLabel id="select-project">Dự án</InputLabel>
                     <Select
                         labelId="select-project"
@@ -234,8 +275,16 @@ function TaskTable() {
                         />
                     </FormControl>
                 </LocalizationProvider>
-                <WorkLogsDialog setNotify={setNotify} />
+                <WorkLogsDialog setNotify={setNotify} setRefresh={setRefresh} refresh={refresh} />
                 <ReadXLSX />
+                <Button
+                    variant="outlined"
+                    sx={{ ml: '5px', mr: '5px' }}
+                    startIcon={<GetAppIcon />}
+                    onClick={handleExportXLSX}
+                >
+                    Xuất Excel
+                </Button>
             </Paper>
             <Paper sx={{ width: '100%', mb: 2, boxShadow: ' rgb(183 183 183) 0px 1px 10px' }}>
                 <TableContainer sx={{ maxHeight: 485 }}>

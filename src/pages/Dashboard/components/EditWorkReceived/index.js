@@ -18,6 +18,7 @@ import Grid from '@mui/material/Grid';
 import userApi from '~/api/Users/useApi';
 import workReceivesApi from '~/api/WorkReceives/workReceivesApi';
 import { SUCCESS, ERROR } from '~/components/CustomAlert/constants';
+import { useSelector } from 'react-redux';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -67,8 +68,7 @@ function EditWorkReceived(props) {
     const [beginDate, setBeginDate] = React.useState(new Date(oldData.BEGIN_DATE_AT));
     const [endDate, setEndDate] = React.useState(new Date(oldData.END_DATE_AT));
     const [users, setUsers] = React.useState([]);
-
-    console.log(beginDate);
+    const loginInUser = useSelector((state) => state.user.current);
 
     //Lấy danh sách user
     const handleClickOpen = async (event) => {
@@ -132,7 +132,12 @@ function EditWorkReceived(props) {
 
     return (
         <div>
-            <IconButton aria-label="expand row" size="small" onClick={handleClickOpen}>
+            <IconButton
+                aria-label="expand row"
+                size="small"
+                onClick={handleClickOpen}
+                disabled={!(props.data.USER_ID_CREATE === loginInUser.id)}
+            >
                 <ModeEditIcon />{' '}
             </IconButton>
             <BootstrapDialog

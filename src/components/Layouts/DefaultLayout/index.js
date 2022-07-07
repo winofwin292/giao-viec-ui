@@ -21,6 +21,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useDispatch } from 'react-redux';
 import { logout } from '~/pages/Login/userSlice';
+import { useSelector } from 'react-redux';
 
 const drawerWidth = 240;
 
@@ -72,6 +73,7 @@ function DefaultLayout({ children }) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const dispatch = useDispatch();
+    const nameUser = useSelector((state) => state.user.current.user.NAME_USERS);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -136,6 +138,14 @@ function DefaultLayout({ children }) {
                     </DrawerHeader>
                     <Divider />
                     <List>
+                        <ListItem>
+                            <Typography>
+                                Xin Chào,{' '}
+                                <Typography variant="b" component="b">
+                                    {nameUser}
+                                </Typography>
+                            </Typography>
+                        </ListItem>
                         <ListItem disablePadding>
                             <ListItemButton onClick={handleLogout}>
                                 <ListItemIcon>

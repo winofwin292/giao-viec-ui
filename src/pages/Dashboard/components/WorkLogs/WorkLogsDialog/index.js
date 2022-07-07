@@ -13,6 +13,7 @@ import workLogsApi from '~/api/WorkLogs/workLogsApi';
 import worksApi from '~/api/Works/worksApi';
 import { SUCCESS, ERROR } from '~/components/CustomAlert/constants';
 import CustomAlert from '~/components/CustomAlert';
+import * as XLSX from 'xlsx';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -158,6 +159,31 @@ function WorkLogsDialog(props) {
         }
     };
 
+    //Xuất file excel
+    const handleExportXLSX = () => {
+        //Chỉnh sửa lại tên file (thực hiện sau)
+        const filename = 'reports.xlsx';
+
+        const exportData = data.map((element, index) => {
+            return {
+                STT: index + 1,
+                'Tên dự án': element.NAME_PROJECT,
+                'Tên công việc': element.NAME_WORKS,
+                'Người giao': element.NAME_USERS,
+                'Tiêu đề': element.TITLE,
+                'Nội dung': element.CONTENT,
+                'Bắt đầu': element.BEGIN_DATE_AT,
+                'Kết thúc': element.END_DATE_AT,
+                'Thời gian thực hiện': element.TIME_WORK_LOGS,
+            };
+        });
+
+        var ws = XLSX.utils.json_to_sheet(exportData, { dateNF: 'HH:mm dd/MM/yyyy' });
+        var wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Logs');
+        XLSX.writeFile(wb, filename);
+    };
+
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -167,6 +193,8 @@ function WorkLogsDialog(props) {
         setProject(-1);
         setLengthData(logs.length);
         setOpen(false);
+        //Làm mới dữ liệu của workTaskTable
+        props.setRefresh(!props.refresh);
     };
 
     //sự kiện thay chọn ngày
@@ -338,9 +366,9 @@ function WorkLogsDialog(props) {
                             </Grid>
                             <Grid item xs={12}>
                                 <Button onClick={handleAddRows}>Thêm dòng mới</Button>
-                                <Button>Chức năng 2</Button>
+                                <Button onClick={handleExportXLSX}>Xuất Excel</Button>
                             </Grid>
-                            <Grid item xs={12} sx={{ height: '470px', minWidth: '100%' }}>
+                            <Grid item xs={12} sx={{ height: '445px', minWidth: '100%' }}>
                                 <WorkLogsTable
                                     data={{
                                         logs: data,

@@ -188,12 +188,12 @@ function DetailDialog(props) {
                                             data={{
                                                 ID: childRow.ID,
                                                 USER_ID: childRow.USER_ID,
-                                                TEN_NGUOI_NHAN: childRow.NAME_RECEIVERS,
                                                 COMMENT_WORK_RECEIVE: childRow.COMMENT_WORK_RECEIVE,
                                                 BEGIN_DATE_AT: childRow.BEGIN_DATE_AT,
                                                 END_DATE_AT: childRow.END_DATE_AT,
                                                 WORK_RECEIVE_GOALS: childRow.WORK_RECEIVE_GOALS,
                                                 MAX_END_DATE_AT: props.data.END_DATE_AT,
+                                                USER_ID_CREATE: props.data.USER_ID,
                                             }}
                                         />
                                     </TableCell>
@@ -204,7 +204,7 @@ function DetailDialog(props) {
                                             miniButton={true}
                                             setNotify={setNotify}
                                             data={{
-                                                WORK_ID: props.id,
+                                                WORK_ID: props.data.id,
                                                 WORK_RECEIVE_ID: childRow.ID,
                                                 USER_ID: childRow.USER_ID,
                                                 END_DATE_AT: childRow.END_DATE_AT,

@@ -153,7 +153,12 @@ function AddWorkForm(props) {
         <div>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 {props.miniButton === true ? (
-                    <IconButton aria-label="expand row" size="small" onClick={handleClickOpen}>
+                    <IconButton
+                        aria-label="expand row"
+                        size="small"
+                        onClick={handleClickOpen}
+                        disabled={!(props.data.USER_ID === userId)}
+                    >
                         <AddTaskIcon />
                     </IconButton>
                 ) : (

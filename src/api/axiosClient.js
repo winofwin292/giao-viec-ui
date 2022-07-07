@@ -3,7 +3,7 @@ import StorageKeys from '~/constants/storage-keys';
 
 //Cấu hình chung cho axios
 const axiosClient = axios.create({
-    baseURL: 'http://192.168.2.149:8081/',
+    baseURL: 'http://192.168.2.129:8081/',
     // baseURL: 'http://127.0.0.1:8081/',
     headers: {
         'content-type': 'application/json',

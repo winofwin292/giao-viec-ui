@@ -9,7 +9,6 @@ import StorageKeys from '~/constants/storage-keys';
 import jwt_decode from 'jwt-decode';
 
 function App() {
-    const [isLogin, setIsLogin] = React.useState(false);
     const loginInUser = useSelector((state) => state.user.current.id);
     const isLoggedIn = !!loginInUser;
     let expired = true;
@@ -25,13 +24,7 @@ function App() {
         }
     }
 
-    React.useEffect(() => {
-        if (!(!isLoggedIn || expired)) {
-            setIsLogin(true);
-        }
-    }, [expired, isLoggedIn, isLogin]);
-
-    if (!isLogin) {
+    if (!isLoggedIn || expired) {
         return <Login />;
     }
 
